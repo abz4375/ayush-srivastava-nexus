@@ -1,10 +1,21 @@
 import { Button } from "@/components/ui/button";
 import { Github, Linkedin, Mail, ArrowDown } from "lucide-react";
+import { useHeroContent } from "@/hooks/useSupabaseData";
 
 const Hero = () => {
+  const { heroContent, loading } = useHeroContent();
+  
   const scrollToSection = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
   };
+
+  if (loading) {
+    return (
+      <section className="min-h-screen flex items-center justify-center bg-gradient-hero">
+        <div className="animate-pulse text-2xl">Loading...</div>
+      </section>
+    );
+  }
 
   return (
     <section className="min-h-screen flex items-center justify-center bg-gradient-hero relative overflow-hidden">
@@ -19,17 +30,22 @@ const Hero = () => {
           <div className="space-y-6">
             <h1 className="text-5xl md:text-7xl font-bold tracking-tight">
               <span className="bg-gradient-primary bg-clip-text text-transparent">
-                Ayush Srivastava
+                {heroContent?.name || "Ayush Srivastava"}
               </span>
             </h1>
             
             <p className="text-xl md:text-2xl text-muted-foreground font-medium">
-              Full-Stack Developer & Computer Science Engineer
+              {heroContent?.title || "Full-Stack Developer & Computer Science Engineer"}
             </p>
             
+            {heroContent?.subtitle && (
+              <p className="text-lg font-medium text-primary/80 max-w-2xl mx-auto leading-relaxed">
+                {heroContent.subtitle}
+              </p>
+            )}
+            
             <p className="text-lg text-foreground/80 max-w-2xl mx-auto leading-relaxed">
-              Building scalable web applications and innovative solutions with modern technologies. 
-              Currently pursuing B.Tech at IIIT Jabalpur with expertise in React, Next.js, and cloud architecture.
+              {heroContent?.description || "Building scalable web applications and innovative solutions with modern technologies. Currently pursuing B.Tech at IIIT Jabalpur with expertise in React, Next.js, and cloud architecture."}
             </p>
           </div>
 
@@ -55,23 +71,27 @@ const Hero = () => {
 
           {/* Social links */}
           <div className="flex items-center justify-center gap-6 pt-8">
-            <a
-              href="https://github.com/abz4375"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="p-3 rounded-full bg-background/50 hover:bg-background transition-all duration-300 hover:shadow-elegant"
-            >
-              <Github className="h-6 w-6" />
-            </a>
+            {heroContent?.github_url && (
+              <a
+                href={heroContent.github_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-3 rounded-full bg-background/50 hover:bg-background transition-all duration-300 hover:shadow-elegant"
+              >
+                <Github className="h-6 w-6" />
+              </a>
+            )}
             
-            <a
-              href="https://www.linkedin.com/in/abz4375"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="p-3 rounded-full bg-background/50 hover:bg-background transition-all duration-300 hover:shadow-elegant"
-            >
-              <Linkedin className="h-6 w-6" />
-            </a>
+            {heroContent?.linkedin_url && (
+              <a
+                href={heroContent.linkedin_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-3 rounded-full bg-background/50 hover:bg-background transition-all duration-300 hover:shadow-elegant"
+              >
+                <Linkedin className="h-6 w-6" />
+              </a>
+            )}
             
             <a
               href="mailto:abz4375.ayushsrivastava@gmail.com"

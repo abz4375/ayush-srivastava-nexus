@@ -1,41 +1,29 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Code, Database, Globe, Wrench, Trophy, Users } from "lucide-react";
+import { useSkills } from "@/hooks/useSupabaseData";
 
-const skillCategories = [
-  {
-    title: "Primary Languages",
-    icon: Code,
-    skills: ["JavaScript/TypeScript", "C++", "Python"]
-  },
-  {
-    title: "Frameworks & Libraries",
-    icon: Globe,
-    skills: ["React.js", "Next.js", "Node.js", "Flask", "Django", "Chrome Extensions"]
-  },
-  {
-    title: "Databases",
-    icon: Database,
-    skills: ["MongoDB", "PostgreSQL", "MySQL", "Firebase"]
-  },
-  {
-    title: "Tools & Technologies",
-    icon: Wrench,
-    skills: ["Git", "VS Code", "ShadCN/UI", "Material-UI", "Tailwind CSS", "Figma"]
-  },
-  {
-    title: "Achievements",
-    icon: Trophy,
-    skills: ["Xiaomi Ode2Code 3.0 - Top 1000/60K", "CGPA: 8.0/10 at IIIT Jabalpur"]
-  },
-  {
-    title: "Soft Skills",
-    icon: Users,
-    skills: ["Team Leadership", "Technical Documentation", "Cross-functional Collaboration"]
-  }
-];
+const iconMap = {
+  "Primary Languages": Code,
+  "Frameworks & Libraries": Globe,
+  "Databases": Database,
+  "Tools & Technologies": Wrench,
+  "Achievements": Trophy,
+  "Soft Skills": Users,
+};
 
 const Skills = () => {
+  const { skills, loading } = useSkills();
+
+  if (loading) {
+    return (
+      <section id="skills" className="py-20 bg-secondary/30">
+        <div className="container mx-auto px-6 text-center">
+          <div className="animate-pulse text-xl">Loading skills...</div>
+        </div>
+      </section>
+    );
+  }
   return (
     <section id="skills" className="py-20 bg-secondary/30">
       <div className="container mx-auto px-6">
@@ -47,8 +35,8 @@ const Skills = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-          {skillCategories.map((category, index) => {
-            const IconComponent = category.icon;
+          {skills.map((category, index) => {
+            const IconComponent = iconMap[category.category as keyof typeof iconMap] || Code;
             return (
               <Card key={index} className="group hover:shadow-elegant transition-all duration-300 border-0 bg-background/60 backdrop-blur-sm">
                 <CardHeader className="pb-4">
@@ -57,14 +45,14 @@ const Skills = () => {
                       <IconComponent className="h-5 w-5 text-primary" />
                     </div>
                     <CardTitle className="text-lg group-hover:text-primary transition-colors duration-300">
-                      {category.title}
+                      {category.category}
                     </CardTitle>
                   </div>
                 </CardHeader>
                 
                 <CardContent>
                   <div className="flex flex-wrap gap-2">
-                    {category.skills.map((skill, skillIndex) => (
+                    {category.skills?.map((skill, skillIndex) => (
                       <Badge 
                         key={skillIndex} 
                         variant="outline" 

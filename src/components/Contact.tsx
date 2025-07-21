@@ -1,43 +1,56 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Github, Linkedin, Mail, Phone, MapPin, Download } from "lucide-react";
+import { useContactInfo } from "@/hooks/useSupabaseData";
 
 const Contact = () => {
+  const { contactInfo: dbContactInfo, loading } = useContactInfo();
+
+  if (loading) {
+    return (
+      <section id="contact" className="py-20">
+        <div className="container mx-auto px-6 text-center">
+          <div className="animate-pulse text-xl">Loading contact info...</div>
+        </div>
+      </section>
+    );
+  }
+
   const contactInfo = [
     {
       icon: Mail,
       label: "Email",
-      value: "abz4375.ayushsrivastava@gmail.com",
-      href: "mailto:abz4375.ayushsrivastava@gmail.com"
+      value: dbContactInfo?.email || "abz4375.ayushsrivastava@gmail.com",
+      href: `mailto:${dbContactInfo?.email || "abz4375.ayushsrivastava@gmail.com"}`
     },
     {
       icon: Phone,
       label: "Phone",
-      value: "+91 8955848239",
-      href: "tel:+918955848239"
+      value: dbContactInfo?.phone || "+91 8955848239",
+      href: `tel:${dbContactInfo?.phone || "+918955848239"}`
     },
     {
       icon: MapPin,
       label: "Location",
-      value: "IIIT Jabalpur, India",
+      value: dbContactInfo?.location || "IIIT Jabalpur, India",
       href: "#"
     }
-  ];
+  ].filter(item => item.value);
 
   const socialLinks = [
-    {
+    dbContactInfo?.github_url && {
       icon: Github,
       label: "GitHub",
-      href: "https://github.com/abz4375",
+      href: dbContactInfo.github_url,
       color: "hover:text-gray-900"
     },
-    {
+    dbContactInfo?.linkedin_url && {
       icon: Linkedin,
       label: "LinkedIn",
-      href: "https://www.linkedin.com/in/abz4375",
+      href: dbContactInfo.linkedin_url,
       color: "hover:text-blue-600"
     }
-  ];
+  ].filter(Boolean);
 
   return (
     <section id="contact" className="py-20">
