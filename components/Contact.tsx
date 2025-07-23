@@ -1,3 +1,5 @@
+'use client'
+
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Github, Linkedin, Mail, Phone, MapPin, Download } from "lucide-react";

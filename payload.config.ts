@@ -1,6 +1,5 @@
-import { buildConfig } from 'payload/config'
+import { buildConfig } from 'payload'
 import { postgresAdapter } from '@payloadcms/db-postgres'
-import { viteBundler } from '@payloadcms/bundler-vite'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 
 const supabaseUrl = "https://ecjlvseneqrvbxdhlqxc.supabase.co"
@@ -8,8 +7,10 @@ const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY || ""
 
 export default buildConfig({
   admin: {
-    bundler: viteBundler(),
     user: 'users',
+    importMap: {
+      baseDir: process.cwd(),
+    },
   },
   editor: lexicalEditor({}),
   collections: [
@@ -75,7 +76,6 @@ export default buildConfig({
       slug: 'experiences',
       admin: {
         useAsTitle: 'position',
-        defaultSort: 'sort_order',
       },
       access: {
         read: () => true,
@@ -127,7 +127,6 @@ export default buildConfig({
       slug: 'projects',
       admin: {
         useAsTitle: 'title',
-        defaultSort: 'sort_order',
       },
       access: {
         read: () => true,
@@ -183,7 +182,6 @@ export default buildConfig({
       slug: 'skills',
       admin: {
         useAsTitle: 'category',
-        defaultSort: 'sort_order',
       },
       access: {
         read: () => true,
@@ -253,13 +251,6 @@ export default buildConfig({
   }),
   secret: process.env.PAYLOAD_SECRET || 'your-secret-here',
   typescript: {
-    outputFile: './src/payload-types.ts'
-  },
-  admin: {
-    autoLogin: {
-      email: 'admin@example.com',
-      password: 'password',
-      prefillOnly: true,
-    },
-  },
+    outputFile: './payload-types.ts'
+  }
 })
