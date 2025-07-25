@@ -84,6 +84,14 @@ module.exports = {
         sm: 'calc(var(--radius) - 4px)'
       },
       keyframes: {
+        typing: {
+          from: { width: '0' },
+          to: { width: '100%' },
+        },
+        'blink-caret': {
+          'from, to': { 'background-color': 'transparent' },
+          '50%': { 'background-color': 'var(--primary-foreground)' }, // Or a specific color like #00ff00
+        },
         'accordion-down': {
           from: {
             height: '0'
@@ -125,7 +133,9 @@ module.exports = {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
         'fade-in': 'fade-in 0.6s ease-out',
-        'slide-up': 'slide-up 0.5s ease-out'
+        'slide-up': 'slide-up 0.5s ease-out',
+        'typing': 'typing 3s steps(13, end) forwards', // Adjust duration and steps if needed
+        'blink-caret': 'blink-caret .75s step-end infinite', // Adjust duration if needed
       }
     }
   },
