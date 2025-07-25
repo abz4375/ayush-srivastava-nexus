@@ -3,16 +3,49 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Building2, Calendar } from "lucide-react";
-import { useExperiences } from "@/hooks/useSupabaseData";
+import { Skeleton } from "@/components/ui/skeleton";
 
-const Experience = () => {
-  const { experiences, loading } = useExperiences();
+interface ExperienceProps {
+  experiences: any[];
+  loading: boolean;
+}
 
+const Experience = ({ experiences, loading }: ExperienceProps) => {
   if (loading) {
     return (
       <section id="experience" className="py-20 bg-secondary/30">
-        <div className="container mx-auto px-6 text-center">
-          <div className="animate-pulse text-xl">Loading experiences...</div>
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-16">
+            <Skeleton className="h-10 w-1/2 mx-auto" />
+            <Skeleton className="h-6 w-3/4 mx-auto mt-4" />
+          </div>
+          <div className="max-w-4xl mx-auto space-y-8">
+            {[...Array(3)].map((_, index) => (
+              <Card key={index} className="bg-background/60 backdrop-blur-sm">
+                <CardHeader>
+                  <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                    <div className="space-y-2">
+                      <Skeleton className="h-6 w-48" />
+                      <Skeleton className="h-5 w-32" />
+                    </div>
+                    <Skeleton className="h-5 w-24" />
+                  </div>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <div className="flex flex-wrap gap-2">
+                    <Skeleton className="h-6 w-20" />
+                    <Skeleton className="h-6 w-24" />
+                    <Skeleton className="h-6 w-16" />
+                  </div>
+                  <div className="space-y-3">
+                    <Skeleton className="h-5 w-full" />
+                    <Skeleton className="h-5 w-5/6" />
+                    <Skeleton className="h-5 w-full" />
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
         </div>
       </section>
     );

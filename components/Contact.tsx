@@ -3,16 +3,62 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Github, Linkedin, Mail, Phone, MapPin, Download } from "lucide-react";
-import { useContactInfo } from "@/hooks/useSupabaseData";
+import { Skeleton } from "@/components/ui/skeleton";
 
-const Contact = () => {
-  const { contactInfo: dbContactInfo, loading } = useContactInfo();
+interface ContactProps {
+  contactInfo: any;
+  loading: boolean;
+  heroContent: any;
+}
 
+const Contact = ({ contactInfo: dbContactInfo, loading, heroContent }: ContactProps) => {
   if (loading) {
     return (
       <section id="contact" className="py-20">
-        <div className="container mx-auto px-6 text-center">
-          <div className="animate-pulse text-xl">Loading contact info...</div>
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-16">
+            <Skeleton className="h-10 w-1/2 mx-auto" />
+            <Skeleton className="h-6 w-3/4 mx-auto mt-4" />
+          </div>
+          <div className="max-w-4xl mx-auto">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <Card className="border-0 bg-background/60 backdrop-blur-sm">
+                <CardContent className="p-8">
+                  <Skeleton className="h-8 w-48 mb-6" />
+                  <div className="space-y-6">
+                    {[...Array(3)].map((_, index) => (
+                      <div key={index} className="flex items-center gap-4">
+                        <Skeleton className="h-12 w-12 rounded-lg" />
+                        <div className="space-y-2">
+                          <Skeleton className="h-4 w-20" />
+                          <Skeleton className="h-5 w-40" />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="mt-8 pt-8 border-t border-border">
+                    <Skeleton className="h-6 w-32 mb-4" />
+                    <div className="flex gap-4">
+                      <Skeleton className="h-12 w-12 rounded-lg" />
+                      <Skeleton className="h-12 w-12 rounded-lg" />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+              <Card className="border-0 bg-gradient-primary text-primary-foreground">
+                <CardContent className="p-8 h-full flex flex-col justify-center">
+                  <div className="space-y-6 text-center">
+                    <Skeleton className="h-8 w-3/4 mx-auto" />
+                    <Skeleton className="h-20 w-full mx-auto" />
+                    <div className="space-y-4 pt-4">
+                      <Skeleton className="h-12 w-full" />
+                      <Skeleton className="h-12 w-full" />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
         </div>
       </section>
     );
@@ -151,7 +197,7 @@ const Contact = () => {
                       className="w-full text-lg bg-background/20 border-primary-foreground/20 hover:bg-background/30 text-primary-foreground"
                       asChild
                     >
-                      <a href="#" download>
+                      <a href={dbContactInfo?.resume_url || heroContent?.resume_url || "#"} target="_blank" rel="noopener noreferrer" download>
                         <Download className="mr-2 h-5 w-5" />
                         Download Resume
                       </a>

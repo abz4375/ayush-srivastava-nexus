@@ -4,16 +4,44 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Github, ExternalLink, Calendar } from "lucide-react";
-import { useProjects } from "@/hooks/useSupabaseData";
+import { Skeleton } from "@/components/ui/skeleton";
 
-const Projects = () => {
-  const { projects, loading } = useProjects();
+interface ProjectsProps {
+  projects: any[];
+  loading: boolean;
+}
 
+const Projects = ({ projects, loading }: ProjectsProps) => {
   if (loading) {
     return (
       <section id="projects" className="py-20">
-        <div className="container mx-auto px-6 text-center">
-          <div className="animate-pulse text-xl">Loading projects...</div>
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-16">
+            <Skeleton className="h-10 w-1/2 mx-auto" />
+            <Skeleton className="h-6 w-3/4 mx-auto mt-4" />
+          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 max-w-7xl mx-auto">
+            {[...Array(3)].map((_, index) => (
+              <Card key={index} className="bg-background/60 backdrop-blur-sm h-full flex flex-col">
+                <CardHeader className="space-y-4">
+                  <Skeleton className="h-6 w-3/4" />
+                  <Skeleton className="h-5 w-1/2" />
+                  <Skeleton className="h-20 w-full" />
+                </CardHeader>
+                <CardContent className="flex-1 flex flex-col justify-between space-y-6">
+                  <div className="flex flex-wrap gap-2">
+                    <Skeleton className="h-6 w-20" />
+                    <Skeleton className="h-6 w-24" />
+                    <Skeleton className="h-6 w-16" />
+                  </div>
+                  <div className="flex gap-3 pt-4">
+                    <Skeleton className="h-10 w-full" />
+                    <Skeleton className="h-10 w-full" />
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
         </div>
       </section>
     );
