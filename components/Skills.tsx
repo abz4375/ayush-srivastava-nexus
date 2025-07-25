@@ -54,13 +54,13 @@ const Skills = () => {
                 
                 <CardContent>
                   <div className="flex flex-wrap gap-2">
-                    {category.skills?.map((skill, skillIndex) => (
+                    {category.skills?.filter(Boolean).map((skill, skillIndex) => (
                       <Badge 
                         key={skillIndex} 
                         variant="outline" 
                         className="bg-background/50 hover:bg-primary/10 transition-colors duration-200 text-sm"
                       >
-                        {skill}
+                        {skill.skill}
                       </Badge>
                     ))}
                   </div>

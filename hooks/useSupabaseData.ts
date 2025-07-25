@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { supabase } from '@/integrations/supabase/client'
 
 export function useHeroContent() {
   const [heroContent, setHeroContent] = useState<any>(null)
@@ -9,22 +8,23 @@ export function useHeroContent() {
 
   useEffect(() => {
     async function fetchHeroContent() {
-      const { data, error } = await (supabase as any)
-        .from('hero_content')
-        .select('*')
-        .limit(1)
-        .single()
-
-      if (data) {
-        setHeroContent(data)
+      try {
+        const response = await fetch('/api/hero-content?depth=1&limit=1');
+        const data = await response.json();
+        if (data && data.docs && data.docs[0]) {
+          setHeroContent(data.docs[0]);
+        }
+      } catch (error) {
+        console.error('Failed to fetch hero content:', error);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false)
     }
 
-    fetchHeroContent()
-  }, [])
+    fetchHeroContent();
+  }, []);
 
-  return { heroContent, loading }
+  return { heroContent, loading };
 }
 
 export function useExperiences() {
@@ -33,44 +33,49 @@ export function useExperiences() {
 
   useEffect(() => {
     async function fetchExperiences() {
-      const { data, error } = await (supabase as any)
-        .from('experiences')
-        .select('*')
-        .order('sort_order', { ascending: true })
-
-      if (data) {
-        setExperiences(data)
+      try {
+        const response = await fetch('/api/experiences?depth=1&limit=100&sort=sort_order');
+        const data = await response.json();
+        if (data && data.docs) {
+          setExperiences(data.docs.filter(Boolean));
+        }
+      } catch (error) {
+        console.error('Failed to fetch experiences:', error);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false)
     }
 
-    fetchExperiences()
-  }, [])
+    fetchExperiences();
+  }, []);
 
-  return { experiences, loading }
+  return { experiences, loading };
 }
 
+// CORRECTED: Changed from Supabase to fetch API
 export function useProjects() {
   const [projects, setProjects] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     async function fetchProjects() {
-      const { data, error } = await (supabase as any)
-        .from('projects')
-        .select('*')
-        .order('sort_order', { ascending: true })
-
-      if (data) {
-        setProjects(data)
+      try {
+        const response = await fetch('/api/projects?depth=1&limit=100&sort=sort_order');
+        const data = await response.json();
+        if (data && data.docs) {
+          setProjects(data.docs.filter(Boolean));
+        }
+      } catch (error) {
+        console.error('Failed to fetch projects:', error);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false)
     }
 
-    fetchProjects()
-  }, [])
+    fetchProjects();
+  }, []);
 
-  return { projects, loading }
+  return { projects, loading };
 }
 
 export function useSkills() {
@@ -79,43 +84,47 @@ export function useSkills() {
 
   useEffect(() => {
     async function fetchSkills() {
-      const { data, error } = await (supabase as any)
-        .from('skills')
-        .select('*')
-        .order('sort_order', { ascending: true })
-
-      if (data) {
-        setSkills(data)
+      try {
+        const response = await fetch('/api/skills?depth=1&limit=100');
+        const data = await response.json();
+        if (data && data.docs) {
+          setSkills(data.docs.filter(Boolean));
+        }
+      } catch (error) {
+        console.error('Failed to fetch skills:', error);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false)
     }
 
-    fetchSkills()
-  }, [])
+    fetchSkills();
+  }, []);
 
-  return { skills, loading }
+  return { skills, loading };
 }
 
+// CORRECTED: Changed from Supabase to fetch API
 export function useContactInfo() {
   const [contactInfo, setContactInfo] = useState<any>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     async function fetchContactInfo() {
-      const { data, error } = await (supabase as any)
-        .from('contact_info')
-        .select('*')
-        .limit(1)
-        .single()
-
-      if (data) {
-        setContactInfo(data)
+      try {
+        const response = await fetch('/api/contact-info?depth=1&limit=1');
+        const data = await response.json();
+        if (data && data.docs && data.docs[0]) {
+          setContactInfo(data.docs[0]);
+        }
+      } catch (error) {
+        console.error('Failed to fetch contact info:', error);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false)
     }
 
-    fetchContactInfo()
-  }, [])
+    fetchContactInfo();
+  }, []);
 
-  return { contactInfo, loading }
+  return { contactInfo, loading };
 }

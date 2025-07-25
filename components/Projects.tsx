@@ -18,6 +18,18 @@ const Projects = () => {
       </section>
     );
   }
+
+  // Safety check for projects data
+  if (!projects || !Array.isArray(projects)) {
+    return (
+      <section id="projects" className="py-20">
+        <div className="container mx-auto px-6 text-center">
+          <div className="text-xl">No projects found</div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section id="projects" className="py-20">
       <div className="container mx-auto px-6">
@@ -30,43 +42,45 @@ const Projects = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 max-w-7xl mx-auto">
           {projects.map((project, index) => (
-            <Card key={index} className="group hover:shadow-elegant transition-all duration-300 border-0 bg-background/60 backdrop-blur-sm h-full flex flex-col">
+            <Card key={project.id || index} className="group hover:shadow-elegant transition-all duration-300 border-0 bg-background/60 backdrop-blur-sm h-full flex flex-col">
               <CardHeader className="space-y-4">
                 <div className="flex items-start justify-between">
                   <CardTitle className="text-xl group-hover:text-primary transition-colors duration-300 leading-tight">
-                    {project.title}
+                    {typeof project.title === 'string' ? project.title : 'Untitled Project'}
                   </CardTitle>
                 </div>
-                
+
                 {project.duration && (
                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
                     <Calendar className="h-4 w-4" />
-                    <span>{project.duration}</span>
+                    <span>{typeof project.duration === 'string' ? project.duration : String(project.duration)}</span>
                   </div>
                 )}
-                
+
                 <p className="text-foreground/80 leading-relaxed">
-                  {project.description}
+                  {typeof project.description === 'string' ? project.description : 'No description available'}
                 </p>
               </CardHeader>
 
               <CardContent className="flex-1 flex flex-col justify-between space-y-6">
                 <div className="space-y-4">
-                  {/* Technologies */}
-                  {project.technologies && (
+                  {/* Technologies with proper type checking */}
+                  {project.technologies && Array.isArray(project.technologies) && project.technologies.length > 0 && (
                     <div className="flex flex-wrap gap-2">
-                      {project.technologies.map((tech, techIndex) => (
-                        <Badge key={techIndex} variant="secondary" className="text-xs bg-secondary/60">
-                          {tech}
-                        </Badge>
-                      ))}
+                      {project.technologies
+                        .filter(tech => tech && (typeof tech === 'string' || typeof tech === 'number'))
+                        .map((tech, techIndex) => (
+                          <Badge key={techIndex} variant="secondary" className="text-xs bg-secondary/60">
+                            {String(tech)}
+                          </Badge>
+                        ))}
                     </div>
                   )}
                 </div>
 
                 {/* Action buttons */}
                 <div className="flex gap-3 pt-4">
-                  {project.github_url && (
+                  {project.github_url && typeof project.github_url === 'string' && (
                     <Button
                       variant="outline"
                       size="sm"
@@ -84,8 +98,10 @@ const Projects = () => {
                       </a>
                     </Button>
                   )}
-                  
-                  {project.demo_url && project.demo_url !== "#" && (
+
+                  {project.demo_url && 
+                   typeof project.demo_url === 'string' && 
+                   project.demo_url !== "#" && (
                     <Button
                       size="sm"
                       className="flex-1 bg-gradient-primary hover:shadow-glow"
