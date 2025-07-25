@@ -52,7 +52,6 @@ export function useExperiences() {
   return { experiences, loading };
 }
 
-// CORRECTED: Changed from Supabase to fetch API
 export function useProjects() {
   const [projects, setProjects] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
@@ -103,7 +102,6 @@ export function useSkills() {
   return { skills, loading };
 }
 
-// CORRECTED: Changed from Supabase to fetch API
 export function useContactInfo() {
   const [contactInfo, setContactInfo] = useState<any>(null)
   const [loading, setLoading] = useState(true)

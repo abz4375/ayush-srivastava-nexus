@@ -51,45 +51,43 @@ const Experience = ({ experiences, loading }: ExperienceProps) => {
     );
   }
   return (
-    <section id="experience" className="py-20 bg-secondary/30">
-      <div className="container mx-auto px-6">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold mb-4">Experience</h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Building real-world solutions and leading development teams
+    <section id="experience" className="py-16">
+      <div className="container mx-auto px-4 sm:px-6">
+        <div className="text-center mb-10 md:mb-12">
+          <h2 className="text-3xl font-bold mb-2">Experience</h2>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            A timeline of my professional journey and key accomplishments.
           </p>
         </div>
 
-        <div className="max-w-4xl mx-auto space-y-8">
+        <div className="max-w-3xl mx-auto space-y-8">
           {experiences.map((exp, index) => (
-            <Card key={index} className="group hover:shadow-elegant transition-all duration-300 border-0 bg-background/60 backdrop-blur-sm">
+            <Card key={index} className="group transition-all duration-300 border-glow bg-card/80 backdrop-blur-sm">
               <CardHeader>
-                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                  <div className="space-y-2">
-                    <CardTitle className="text-xl group-hover:text-primary transition-colors duration-300">
+                <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-2">
+                  <div className="space-y-1">
+                    <CardTitle className="text-lg group-hover:text-primary transition-colors duration-300">
                       {exp.position}
                     </CardTitle>
-                    <div className="flex items-center gap-2 text-muted-foreground">
-                      <Building2 className="h-4 w-4" />
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <Building2 className="h-3 w-3" />
                       <span className="font-medium">{exp.company}</span>
                     </div>
                   </div>
                   
-                  <div className="flex flex-col sm:flex-row gap-2">
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <Calendar className="h-4 w-4" />
-                      <span>{exp.duration}</span>
-                    </div>
+                  <div className="flex items-center gap-2 text-xs text-muted-foreground flex-shrink-0 mt-1">
+                    <Calendar className="h-3 w-3" />
+                    <span>{exp.duration}</span>
                   </div>
                 </div>
               </CardHeader>
 
-              <CardContent className="space-y-6">
+              <CardContent className="space-y-4 pt-0">
                 {/* Technologies */}
                 {exp.technologies && (
                   <div className="flex flex-wrap gap-2">
                     {exp.technologies.filter(Boolean).map((tech, techIndex) => (
-                      <Badge key={techIndex} variant="outline" className="bg-primary/5 hover:bg-primary/10 transition-colors">
+                      <Badge key={techIndex} variant="secondary" className="text-xs">
                         {tech.technology}
                       </Badge>
                     ))}
@@ -97,12 +95,12 @@ const Experience = ({ experiences, loading }: ExperienceProps) => {
                 )}
 
                 {/* Achievements */}
-                {exp.description && (
-                  <ul className="space-y-3">
-                    {exp.description.filter(Boolean).map((achievement, achIndex) => (
-                      <li key={achIndex} className="flex items-start gap-3 text-foreground/80">
-                        <div className="h-2 w-2 rounded-full bg-primary mt-2 flex-shrink-0"></div>
-                        <span className="leading-relaxed">{achievement.achievement}</span>
+                {exp.achievements && Array.isArray(exp.achievements) && (
+                  <ul className="space-y-2 pl-4">
+                    {exp.achievements.filter(Boolean).map((achievement, achIndex) => (
+                      <li key={achIndex} className="flex items-start gap-2 text-sm text-foreground/80">
+                        <span className="text-primary flex-shrink-0">&gt;</span>
+                        <span className="leading-snug">{achievement.achievement}</span>
                       </li>
                     ))}
                   </ul>

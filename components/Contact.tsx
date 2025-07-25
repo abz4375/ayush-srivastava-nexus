@@ -101,41 +101,41 @@ const Contact = ({ contactInfo: dbContactInfo, loading, heroContent }: ContactPr
   ].filter(Boolean);
 
   return (
-    <section id="contact" className="py-20">
-      <div className="container mx-auto px-6">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold mb-4">Let's Connect</h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Ready to discuss opportunities, collaborate on projects, or just have a tech conversation
+    <section id="contact" className="py-16 bg-secondary/30">
+      <div className="container mx-auto px-4 sm:px-6">
+        <div className="text-center mb-10 md:mb-12">
+          <h2 className="text-3xl font-bold mb-2">Let's Connect</h2>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            Open to new opportunities and collaborations.
           </p>
         </div>
 
         <div className="max-w-4xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Contact Information */}
-            <Card className="border-0 bg-background/60 backdrop-blur-sm">
-              <CardContent className="p-8">
-                <h3 className="text-2xl font-bold mb-6">Get In Touch</h3>
+            <Card className="border-glow bg-card/80 backdrop-blur-sm">
+              <CardContent className="p-6">
+                <h3 className="text-xl font-bold mb-4">Get In Touch</h3>
                 
-                <div className="space-y-6">
+                <div className="space-y-4">
                   {contactInfo.map((contact, index) => {
                     const IconComponent = contact.icon;
                     return (
-                      <div key={index} className="flex items-center gap-4 group">
-                        <div className="p-3 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors duration-300">
-                          <IconComponent className="h-5 w-5 text-primary" />
+                      <div key={index} className="flex items-center gap-3 group">
+                        <div className="p-2 rounded-md bg-primary/10">
+                          <IconComponent className="h-4 w-4 text-primary" />
                         </div>
                         <div>
-                          <p className="text-sm text-muted-foreground">{contact.label}</p>
+                          <p className="text-xs text-muted-foreground">{contact.label}</p>
                           {contact.href !== "#" ? (
                             <a 
                               href={contact.href} 
-                              className="text-foreground hover:text-primary transition-colors duration-300 font-medium"
+                              className="text-sm text-foreground hover:text-primary transition-colors duration-300 font-medium"
                             >
                               {contact.value}
                             </a>
                           ) : (
-                            <p className="text-foreground font-medium">{contact.value}</p>
+                            <p className="text-sm text-foreground font-medium">{contact.value}</p>
                           )}
                         </div>
                       </div>
@@ -144,9 +144,9 @@ const Contact = ({ contactInfo: dbContactInfo, loading, heroContent }: ContactPr
                 </div>
 
                 {/* Social Links */}
-                <div className="mt-8 pt-8 border-t border-border">
-                  <h4 className="text-lg font-semibold mb-4">Follow Me</h4>
-                  <div className="flex gap-4">
+                <div className="mt-6 pt-6 border-t border-border/50">
+                  <h4 className="text-md font-semibold mb-3">Follow Me</h4>
+                  <div className="flex gap-3">
                     {socialLinks.map((social, index) => {
                       const IconComponent = social.icon;
                       return (
@@ -155,10 +155,10 @@ const Contact = ({ contactInfo: dbContactInfo, loading, heroContent }: ContactPr
                           href={social.href}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className={`p-3 rounded-lg bg-secondary hover:bg-secondary/80 transition-all duration-300 hover:shadow-elegant ${social.color}`}
+                          className="p-2 rounded-md bg-secondary hover:bg-accent transition-all duration-300"
                           aria-label={social.label}
                         >
-                          <IconComponent className="h-6 w-6" />
+                          <IconComponent className="h-5 w-5" />
                         </a>
                       );
                     })}
@@ -168,45 +168,34 @@ const Contact = ({ contactInfo: dbContactInfo, loading, heroContent }: ContactPr
             </Card>
 
             {/* Call to Action */}
-            <Card className="border-0 bg-gradient-primary text-primary-foreground">
-              <CardContent className="p-8 h-full flex flex-col justify-center">
-                <div className="space-y-6 text-center">
-                  <h3 className="text-2xl font-bold">Ready to Work Together?</h3>
+            <Card className="border-glow bg-gradient-secondary text-foreground">
+              <CardContent className="p-6 h-full flex flex-col justify-center">
+                <div className="space-y-4 text-center">
+                  <h3 className="text-xl font-bold">Ready to Work Together?</h3>
                   
-                  <p className="text-lg opacity-90 leading-relaxed">
+                  <p className="text-sm text-muted-foreground leading-snug">
                     I'm actively seeking full-time opportunities and exciting projects. 
-                    Let's discuss how we can create something amazing together.
+                    Let's create something amazing.
                   </p>
 
-                  <div className="space-y-4 pt-4">
-                    <Button
-                      size="lg"
-                      variant="secondary"
-                      className="w-full text-lg"
-                      asChild
-                    >
+                  <div className="space-y-3 pt-2">
+                    <Button size="sm" className="w-full text-xs" asChild>
                       <a href="mailto:abz4375.ayushsrivastava@gmail.com">
-                        <Mail className="mr-2 h-5 w-5" />
+                        <Mail className="mr-2 h-3 w-3" />
                         Send Me an Email
                       </a>
                     </Button>
 
-                    <Button
-                      size="lg"
-                      variant="outline"
-                      className="w-full text-lg bg-background/20 border-primary-foreground/20 hover:bg-background/30 text-primary-foreground"
-                      asChild
-                    >
+                    <Button size="sm" variant="outline" className="w-full text-xs" asChild>
                       <a href={dbContactInfo?.resume_url || heroContent?.resume_url || "#"} target="_blank" rel="noopener noreferrer" download>
-                        <Download className="mr-2 h-5 w-5" />
+                        <Download className="mr-2 h-3 w-3" />
                         Download Resume
                       </a>
                     </Button>
                   </div>
 
-                  <div className="pt-4 text-sm opacity-75">
-                    <p>Currently pursuing B.Tech at IIIT Jabalpur</p>
-                    <p>Expected Graduation: 2025</p>
+                  <div className="pt-2 text-xs text-muted-foreground">
+                    <p>Graduation Year: 2025</p>
                   </div>
                 </div>
               </CardContent>
