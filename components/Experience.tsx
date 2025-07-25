@@ -52,15 +52,15 @@ const Experience = ({ experiences, loading }: ExperienceProps) => {
   }
   return (
     <section id="experience" className="py-16">
-      <div className="container mx-auto px-6">
-        <div className="text-center mb-12">
+      <div className="container mx-auto px-4 sm:px-6">
+        <div className="text-center mb-10 md:mb-12">
           <h2 className="text-3xl font-bold mb-2">Experience</h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             A timeline of my professional journey and key accomplishments.
           </p>
         </div>
 
-        <div className="max-w-3xl mx-auto space-y-6">
+        <div className="max-w-3xl mx-auto space-y-8">
           {experiences.map((exp, index) => (
             <Card key={index} className="group transition-all duration-300 border-glow bg-card/80 backdrop-blur-sm">
               <CardHeader>

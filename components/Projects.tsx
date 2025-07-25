@@ -61,21 +61,21 @@ const Projects = ({ projects, loading }: ProjectsProps) => {
 
   return (
     <section id="projects" className="py-16 bg-secondary/30">
-      <div className="container mx-auto px-6">
-        <div className="text-center mb-12">
+      <div className="container mx-auto px-4 sm:px-6">
+        <div className="text-center mb-10 md:mb-12">
           <h2 className="text-3xl font-bold mb-2">Featured Projects</h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             A selection of projects that showcase my skills and passion.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
           {projects.map((project, index) => (
             <Card key={project.id || index} className="group transition-all duration-300 border-glow bg-card/80 backdrop-blur-sm h-full flex flex-col overflow-hidden">
               {project.image_url && typeof project.image_url === 'string' ? (
                 <div className="relative h-40 w-full">
                   <Image
-                    src={project.image_url}
+                    src={project.image_url || ''}
                     alt={project.title || 'Project Image'}
                     layout="fill"
                     objectFit="cover"

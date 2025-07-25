@@ -102,8 +102,8 @@ const Contact = ({ contactInfo: dbContactInfo, loading, heroContent }: ContactPr
 
   return (
     <section id="contact" className="py-16 bg-secondary/30">
-      <div className="container mx-auto px-6">
-        <div className="text-center mb-12">
+      <div className="container mx-auto px-4 sm:px-6">
+        <div className="text-center mb-10 md:mb-12">
           <h2 className="text-3xl font-bold mb-2">Let's Connect</h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             Open to new opportunities and collaborations.
@@ -111,7 +111,7 @@ const Contact = ({ contactInfo: dbContactInfo, loading, heroContent }: ContactPr
         </div>
 
         <div className="max-w-4xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Contact Information */}
             <Card className="border-glow bg-card/80 backdrop-blur-sm">
               <CardContent className="p-6">
@@ -195,7 +195,7 @@ const Contact = ({ contactInfo: dbContactInfo, loading, heroContent }: ContactPr
                   </div>
 
                   <div className="pt-2 text-xs text-muted-foreground">
-                    <p>Expected Graduation: 2025</p>
+                    <p>Graduation Year: 2025</p>
                   </div>
                 </div>
               </CardContent>

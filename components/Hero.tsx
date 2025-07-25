@@ -51,23 +51,23 @@ const Hero = ({ heroContent, loading }: HeroProps) => {
         backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000' fill-opacity='0.02'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
       }}></div>
       
-      <div className="container mx-auto px-6 relative z-10">
+      <div className="container mx-auto px-4 sm:px-6 relative z-10 mt-[72px]">
         <div className="flex flex-col lg:flex-row items-center justify-center gap-12">
           {/* Image */}
           <div className="flex-shrink-0">
             <Image
               src="/ayush.png"
               alt="Ayush Srivastava"
-              width={200}
-              height={200}
-              className="rounded-full border-4 border-primary/20 object-cover shadow-elegant"
+              width={150}
+              height={150}
+              className="rounded-full border-4 border-primary/20 object-cover shadow-elegant lg:w-[200px] lg:h-[200px]"
               priority
             />
           </div>
 
           {/* Main content */}
           <div className="text-center lg:text-left max-w-2xl space-y-4">
-            <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
+            <h1 className="text-3xl md:text-6xl font-bold tracking-tight">
               <span className="bg-gradient-primary bg-clip-text text-transparent">
                 {heroContent?.name || "Ayush Srivastava"}
               </span>

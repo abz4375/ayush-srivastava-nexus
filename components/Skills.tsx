@@ -54,15 +54,15 @@ const Skills = ({ skills, loading }: SkillsProps) => {
   }
   return (
     <section id="skills" className="py-16">
-      <div className="container mx-auto px-6">
-        <div className="text-center mb-12">
+      <div className="container mx-auto px-4 sm:px-6">
+        <div className="text-center mb-10 md:mb-12">
           <h2 className="text-3xl font-bold mb-2">Skills & Expertise</h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             My technical toolkit for building and deploying applications.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-5xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
           {skills.map((category, index) => {
             const IconComponent = iconMap[category.category as keyof typeof iconMap] || Code;
             return (

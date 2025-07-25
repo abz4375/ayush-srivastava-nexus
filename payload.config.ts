@@ -7,10 +7,19 @@ import { lexicalEditor } from '@payloadcms/richtext-lexical';
 // const supabaseUrl = "https://ecjlvseneqrvbxdhlqxc.supabase.co";
 // const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
 
+// import CustomLogin from './components/payload/Login';
+
 export default buildConfig({
     admin: {
         user: 'users',
         // Removed bundler configuration as it's causing module resolution issues
+        // components: {
+        //     views: {
+        //         Login: {
+        //           Component: CustomLogin,
+        //         }
+        //     },
+        // },
         importMap: {
             baseDir: process.cwd(),
         },
@@ -133,6 +142,11 @@ export default buildConfig({
                     type: 'text',
                     label: 'Company', // Added label
                     required: true,
+                },
+                {
+                    name: 'duration', // Added duration field
+                    type: 'text',
+                    label: 'Duration',
                 },
                 {
                     name: 'achievements', // Changed to achievements (array of objects) for multiple achievements
