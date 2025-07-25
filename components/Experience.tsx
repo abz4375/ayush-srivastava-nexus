@@ -57,7 +57,7 @@ const Experience = () => {
                   <div className="flex flex-wrap gap-2">
                     {exp.technologies.filter(Boolean).map((tech, techIndex) => (
                       <Badge key={techIndex} variant="outline" className="bg-primary/5 hover:bg-primary/10 transition-colors">
-                        {tech}
+                        {tech.technology}
                       </Badge>
                     ))}
                   </div>
@@ -69,7 +69,7 @@ const Experience = () => {
                     {exp.description.filter(Boolean).map((achievement, achIndex) => (
                       <li key={achIndex} className="flex items-start gap-3 text-foreground/80">
                         <div className="h-2 w-2 rounded-full bg-primary mt-2 flex-shrink-0"></div>
-                        <span className="leading-relaxed">{achievement}</span>
+                        <span className="leading-relaxed">{achievement.achievement}</span>
                       </li>
                     ))}
                   </ul>
