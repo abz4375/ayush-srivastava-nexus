@@ -68,10 +68,10 @@ const Projects = () => {
                   {project.technologies && Array.isArray(project.technologies) && project.technologies.length > 0 && (
                     <div className="flex flex-wrap gap-2">
                       {project.technologies
-                        .filter(tech => tech && (typeof tech === 'string' || typeof tech === 'number'))
+                        .filter(tech => tech && typeof tech.technology === 'string')
                         .map((tech, techIndex) => (
                           <Badge key={techIndex} variant="secondary" className="text-xs bg-secondary/60">
-                            {String(tech)}
+                            {tech.technology}
                           </Badge>
                         ))}
                     </div>
