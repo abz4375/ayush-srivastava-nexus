@@ -1,73 +1,94 @@
-# Welcome to your Lovable project
+# Ayush Srivastava - Personal Portfolio 🚀
 
-## Project info
+This repository hosts the personal portfolio website of Ayush Srivastava, showcasing his projects, experience, skills, and contact information.
 
-**URL**: https://lovable.dev/projects/f49d3bb1-0aa0-4c59-8471-447240cef73c
+## Technologies Used 💻
 
-## How can I edit this code?
+- Next.js
+- React
+- TypeScript
+- Tailwind CSS
+- Payload CMS (for content management)
+- Supabase (for database and authentication)
 
-There are several ways of editing your application.
+## Features ✨
 
-**Use Lovable**
+- **Hero Section**: Introduction to Ayush Srivastava.
+- **About Section**: Detailed information about Ayush.
+- **Skills Section**: Overview of technical skills.
+- **Experience Section**: Professional experience and roles.
+- **Projects Section**: Showcase of personal and professional projects.
+- **Contact Section**: Form for inquiries and contact details.
+- **Responsive Design**: Optimized for various devices.
+- **CMS Integration**: Easily manage content via Payload CMS.
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/f49d3bb1-0aa0-4c59-8471-447240cef73c) and start prompting.
+## Getting Started 🚀
 
-Changes made via Lovable will be committed automatically to this repo.
+To run this project locally, follow these steps:
 
-**Use your preferred IDE**
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/abz4375/ayush-srivastava-nexus.git
+   cd ayush-srivastava-nexus
+   ```
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+2. **Install dependencies:**
+   ```bash
+   npm install
+   # or yarn install
+   # or pnpm install
+   # or bun install
+   ```
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+3. **Set up environment variables:**
+   Create a `.env.local` file in the root directory and add the following:
 
-Follow these steps:
+   ```
+   NEXT_PUBLIC_SERVER_URL=http://localhost:3000
+   PAYLOAD_SECRET=YOUR_PAYLOAD_SECRET_HERE
+   NEXT_REVALIDATION_TAGS=YOUR_REVALIDATION_TAGS_HERE
+   SUPABASE_URL=YOUR_SUPABASE_URL_HERE
+   SUPABASE_ANON_KEY=YOUR_SUPABASE_ANON_KEY_HERE
+   ```
+   Replace the placeholder values with your actual secrets and keys.
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+4. **Run the development server:**
+   ```bash
+   npm run dev
+   ```
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+   Open [http://localhost:3000](http://localhost:3000) in your browser to see the result.
 
-# Step 3: Install the necessary dependencies.
-npm i
+## Payload CMS 📝
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+This project uses Payload CMS for content management. To access the admin panel:
+
+1. Ensure the development server is running (`npm run dev`).
+2. Navigate to [http://localhost:3000/admin](http://localhost:3000/admin).
+3. Create an admin user if you haven't already.
+
+## Project Structure 📂
+
+```
+.
+├── app/                  # Next.js application pages and API routes
+├── components/           # Reusable React components
+├── hooks/                # Custom React hooks
+├── integrations/         # Integrations with external services (e.g., Supabase)
+├── lib/                  # Utility functions
+├── public/               # Static assets
+├── src/                  # Payload CMS configuration and migrations
+├── supabase/             # Supabase specific files
+├── payload.config.ts     # Payload CMS configuration
+├── next.config.ts        # Next.js configuration
+├── tailwind.config.js    # Tailwind CSS configuration
+└── tsconfig.json         # TypeScript configuration
 ```
 
-**Edit a file directly in GitHub**
+## Contact 📧
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+For any inquiries, please reach out via the contact form on the website or connect with Ayush Srivastava through the provided social links.
 
-**Use GitHub Codespaces**
+---
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/f49d3bb1-0aa0-4c59-8471-447240cef73c) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+© 2025 Ayush Srivastava. All Rights Reserved.
