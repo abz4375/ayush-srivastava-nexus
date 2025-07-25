@@ -55,7 +55,7 @@ const Experience = () => {
                 {/* Technologies */}
                 {exp.technologies && (
                   <div className="flex flex-wrap gap-2">
-                    {exp.technologies.map((tech, techIndex) => (
+                    {exp.technologies.filter(Boolean).map((tech, techIndex) => (
                       <Badge key={techIndex} variant="outline" className="bg-primary/5 hover:bg-primary/10 transition-colors">
                         {tech}
                       </Badge>
@@ -66,7 +66,7 @@ const Experience = () => {
                 {/* Achievements */}
                 {exp.description && (
                   <ul className="space-y-3">
-                    {exp.description.map((achievement, achIndex) => (
+                    {exp.description.filter(Boolean).map((achievement, achIndex) => (
                       <li key={achIndex} className="flex items-start gap-3 text-foreground/80">
                         <div className="h-2 w-2 rounded-full bg-primary mt-2 flex-shrink-0"></div>
                         <span className="leading-relaxed">{achievement}</span>
