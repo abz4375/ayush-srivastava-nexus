@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
+import { VscTerminalBash } from "react-icons/vsc";
 
 const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -39,9 +40,10 @@ const Navigation = () => {
           {/* Logo */}
           <button
             onClick={() => scrollToSection('hero')}
-            className="text-lg font-bold bg-gradient-primary bg-clip-text text-transparent hover:opacity-80 transition-opacity"
+            className="text-lg font-bold bg-gradient-primary bg-clip-text text-transparent hover:opacity-80 transition-opacity flex items-center gap-2"
           >
-            $ sudo ayush 
+            <VscTerminalBash className="text-white text-2xl" />
+            sudo ayush 
           </button>
 
           {/* Desktop Navigation */}
