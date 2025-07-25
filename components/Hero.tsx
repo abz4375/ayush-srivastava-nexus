@@ -2,19 +2,43 @@
 
 import { Button } from "@/components/ui/button";
 import { Github, Linkedin, Mail, ArrowDown } from "lucide-react";
-import { useHeroContent } from "@/hooks/useSupabaseData";
+import { Skeleton } from "@/components/ui/skeleton";
 
-const Hero = () => {
-  const { heroContent, loading } = useHeroContent();
-  
+interface HeroProps {
+  heroContent: any;
+  loading: boolean;
+}
+
+const Hero = ({ heroContent, loading }: HeroProps) => {
   const scrollToSection = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
   };
 
   if (loading) {
     return (
-      <section className="min-h-screen flex items-center justify-center bg-gradient-hero">
-        <div className="animate-pulse text-2xl">Loading...</div>
+      <section className="min-h-screen flex items-center justify-center bg-gradient-hero relative overflow-hidden">
+        <div className="absolute inset-0 opacity-50" style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000' fill-opacity='0.02'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
+        }}></div>
+        <div className="container mx-auto px-6 text-center relative z-10">
+          <div className="max-w-4xl mx-auto space-y-8">
+            <div className="space-y-6">
+              <Skeleton className="h-16 w-3/4 mx-auto" />
+              <Skeleton className="h-8 w-1/2 mx-auto" />
+              <Skeleton className="h-6 w-2/3 mx-auto" />
+              <Skeleton className="h-24 w-full mx-auto" />
+            </div>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+              <Skeleton className="h-12 w-40" />
+              <Skeleton className="h-12 w-40" />
+            </div>
+            <div className="flex items-center justify-center gap-6 pt-8">
+              <Skeleton className="h-12 w-12 rounded-full" />
+              <Skeleton className="h-12 w-12 rounded-full" />
+              <Skeleton className="h-12 w-12 rounded-full" />
+            </div>
+          </div>
+        </div>
       </section>
     );
   }

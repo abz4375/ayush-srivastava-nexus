@@ -3,7 +3,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Code, Database, Globe, Wrench, Trophy, Users } from "lucide-react";
-import { useSkills } from "@/hooks/useSupabaseData";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const iconMap = {
   "Primary Languages": Code,
@@ -14,14 +14,40 @@ const iconMap = {
   "Soft Skills": Users,
 };
 
-const Skills = () => {
-  const { skills, loading } = useSkills();
+interface SkillsProps {
+  skills: any[];
+  loading: boolean;
+}
 
+const Skills = ({ skills, loading }: SkillsProps) => {
   if (loading) {
     return (
       <section id="skills" className="py-20 bg-secondary/30">
-        <div className="container mx-auto px-6 text-center">
-          <div className="animate-pulse text-xl">Loading skills...</div>
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-16">
+            <Skeleton className="h-10 w-1/2 mx-auto" />
+            <Skeleton className="h-6 w-3/4 mx-auto mt-4" />
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+            {[...Array(6)].map((_, index) => (
+              <Card key={index} className="bg-background/60 backdrop-blur-sm">
+                <CardHeader className="pb-4">
+                  <div className="flex items-center gap-3">
+                    <Skeleton className="h-10 w-10 rounded-lg" />
+                    <Skeleton className="h-6 w-32" />
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex flex-wrap gap-2">
+                    <Skeleton className="h-6 w-20" />
+                    <Skeleton className="h-6 w-24" />
+                    <Skeleton className="h-6 w-16" />
+                    <Skeleton className="h-6 w-28" />
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
         </div>
       </section>
     );
