@@ -1,11 +1,11 @@
 import { withPayload } from '@payloadcms/next/withPayload'
+import type { NextConfig } from 'next'
 
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  // Your Next.js config here
+const nextConfig: NextConfig = {
+  output: 'export',
   experimental: {
-    reactCompiler: false
-  }
+    reactCompiler: false,
+  },
 }
 
 export default withPayload(nextConfig)
