@@ -53,38 +53,38 @@ const Skills = ({ skills, loading }: SkillsProps) => {
     );
   }
   return (
-    <section id="skills" className="py-20 bg-secondary/30">
+    <section id="skills" className="py-16">
       <div className="container mx-auto px-6">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold mb-4">Skills & Expertise</h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            A comprehensive toolkit for modern software development
+        <div className="text-center mb-12">
+          <h2 className="text-3xl font-bold mb-2">Skills & Expertise</h2>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            My technical toolkit for building and deploying applications.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-5xl mx-auto">
           {skills.map((category, index) => {
             const IconComponent = iconMap[category.category as keyof typeof iconMap] || Code;
             return (
-              <Card key={index} className="group hover:shadow-elegant transition-all duration-300 border-0 bg-background/60 backdrop-blur-sm">
-                <CardHeader className="pb-4">
+              <Card key={index} className="group transition-all duration-300 border-glow bg-card/80 backdrop-blur-sm">
+                <CardHeader className="pb-3">
                   <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors duration-300">
-                      <IconComponent className="h-5 w-5 text-primary" />
+                    <div className="p-1.5 rounded-md bg-primary/10">
+                      <IconComponent className="h-4 w-4 text-primary" />
                     </div>
-                    <CardTitle className="text-lg group-hover:text-primary transition-colors duration-300">
+                    <CardTitle className="text-md group-hover:text-primary transition-colors duration-300">
                       {category.category}
                     </CardTitle>
                   </div>
                 </CardHeader>
                 
                 <CardContent>
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-1.5">
                     {category.skills?.filter(Boolean).map((skill, skillIndex) => (
                       <Badge 
                         key={skillIndex} 
-                        variant="outline" 
-                        className="bg-background/50 hover:bg-primary/10 transition-colors duration-200 text-sm"
+                        variant="secondary" 
+                        className="text-xs"
                       >
                         {skill.skill}
                       </Badge>
@@ -97,19 +97,19 @@ const Skills = ({ skills, loading }: SkillsProps) => {
         </div>
 
         {/* Additional highlight section */}
-        <div className="mt-16 max-w-4xl mx-auto">
-          <Card className="border-0 bg-gradient-primary text-primary-foreground">
-            <CardContent className="p-8 text-center">
-              <h3 className="text-2xl font-bold mb-4">Currently Learning & Exploring</h3>
-              <p className="text-lg opacity-90 mb-6">
-                Always staying ahead of the curve with emerging technologies
+        <div className="mt-12 max-w-4xl mx-auto">
+          <Card className="border-glow bg-gradient-secondary text-foreground">
+            <CardContent className="p-6 text-center">
+              <h3 className="text-xl font-bold mb-2">Currently Exploring</h3>
+              <p className="text-md text-muted-foreground mb-4">
+                Continuously learning and adapting to new technologies.
               </p>
-              <div className="flex flex-wrap justify-center gap-3">
+              <div className="flex flex-wrap justify-center gap-2">
                 {["AI/ML Integration", "Cloud Architecture", "DevOps", "Web3", "Microservices"].map((tech, index) => (
                   <Badge 
                     key={index} 
-                    variant="secondary" 
-                    className="bg-background/20 text-primary-foreground hover:bg-background/30 transition-colors"
+                    variant="outline" 
+                    className="text-xs"
                   >
                     {tech}
                   </Badge>

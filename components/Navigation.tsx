@@ -32,25 +32,25 @@ const Navigation = () => {
 
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-      isScrolled ? 'bg-background/80 backdrop-blur-md shadow-sm' : 'bg-transparent'
+      isScrolled ? 'bg-background/80 backdrop-blur-md border-b border-border/50' : 'bg-transparent'
     }`}>
       <div className="container mx-auto px-6">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-14">
           {/* Logo */}
           <button
             onClick={() => scrollToSection('hero')}
-            className="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent hover:opacity-80 transition-opacity"
+            className="text-lg font-bold bg-gradient-primary bg-clip-text text-transparent hover:opacity-80 transition-opacity"
           >
-            Ayush Srivastava
+            ayush-srivastava 
           </button>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden md:flex items-center space-x-6">
             {navItems.map((item) => (
               <button
                 key={item.id}
                 onClick={() => scrollToSection(item.id)}
-                className="text-foreground/80 hover:text-primary transition-colors duration-300 font-medium"
+                className="text-sm text-muted-foreground hover:text-primary transition-colors duration-300 font-medium"
               >
                 {item.label}
               </button>
@@ -61,7 +61,7 @@ const Navigation = () => {
           <Button
             variant="ghost"
             size="sm"
-            className="md:hidden"
+            className="md:hidden text-muted-foreground hover:text-primary"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
             {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -70,13 +70,13 @@ const Navigation = () => {
 
         {/* Mobile Navigation */}
         {isMobileMenuOpen && (
-          <div className="md:hidden py-4 border-t border-border bg-background/90 backdrop-blur-md">
-            <div className="flex flex-col space-y-3">
+          <div className="md:hidden py-3 border-t border-border/50 bg-background/90 backdrop-blur-md">
+            <div className="flex flex-col space-y-2">
               {navItems.map((item) => (
                 <button
                   key={item.id}
                   onClick={() => scrollToSection(item.id)}
-                  className="text-left px-4 py-2 text-foreground/80 hover:text-primary hover:bg-secondary/50 rounded-md transition-all duration-300 font-medium"
+                  className="text-left px-4 py-2 text-sm text-muted-foreground hover:text-primary hover:bg-accent rounded-md transition-all duration-300 font-medium"
                 >
                   {item.label}
                 </button>
