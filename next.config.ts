@@ -9,7 +9,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'team-up-one.vercel.app',
+        hostname: '**',
         port: '',
         pathname: '/**',
       },
