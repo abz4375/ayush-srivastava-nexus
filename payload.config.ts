@@ -29,7 +29,7 @@ export default buildConfig({
         {
             slug: 'users',
             auth: true,
-            versions: true, // Added for content versioning
+            versions: { maxPerDoc: 2 }, // Limit versions to current and previous
             admin: {
                 useAsTitle: 'name', // Correct placement for useAsTitle
             },
@@ -67,7 +67,7 @@ export default buildConfig({
         },
         {
             slug: 'hero-content',
-            versions: true, // Added for content versioning
+            versions: { maxPerDoc: 2 }, // Limit versions to current and previous
             access: {
                 create: () => true,
                 read: () => true,
@@ -120,7 +120,7 @@ export default buildConfig({
         },
         {
             slug: 'experiences',
-            versions: true, // Added for content versioning
+            versions: { maxPerDoc: 2 }, // Limit versions to current and previous
             access: {
                 create: () => true,
                 read: () => true,
@@ -182,7 +182,7 @@ export default buildConfig({
         },
         {
             slug: 'projects',
-            versions: true, // Added for content versioning
+            versions: { maxPerDoc: 2 }, // Limit versions to current and previous
             access: {
                 create: () => true,
                 read: () => true,
@@ -247,7 +247,7 @@ export default buildConfig({
         },
         {
             slug: 'skills',
-            versions: true, // Added for content versioning
+            versions: { maxPerDoc: 2 }, // Limit versions to current and previous
             access: {
                 create: () => true,
                 read: () => true,
@@ -289,7 +289,7 @@ export default buildConfig({
         },
         {
             slug: 'contact-info',
-            versions: true, // Added for content versioning
+            versions: { maxPerDoc: 2 }, // Limit versions to current and previous
             access: {
                 create: () => true,
                 read: () => true,
