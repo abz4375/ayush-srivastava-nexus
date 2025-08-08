@@ -17,7 +17,7 @@ export class ChatbotService {
 
     private async fetchPortfolioData(): Promise<any | null> {
         try {
-            const response = await fetch('http://localhost:3000/api/portfolio'); // Assuming the API is on the same host
+            const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/portfolio`); // Assuming the API is on the same host
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
