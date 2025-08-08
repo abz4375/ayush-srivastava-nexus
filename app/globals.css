@@ -125,3 +125,15 @@
     @apply border border-primary/20 shadow-lg shadow-primary/5;
   }
 }
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+.blinking-cursor-block {
+  display: inline-block;
+  width: 0.75em;
+  height: 1.5em;
+  background-color: var(--primary);
+  animation: blink 1s step-end infinite;
+  transform: translateY(0.15em);
+}

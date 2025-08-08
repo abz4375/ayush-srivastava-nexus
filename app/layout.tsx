@@ -4,6 +4,7 @@ import { GeistMono } from "geist/font/mono";
 import "./globals.css";
 import { Providers } from "@/components/providers";
 import { Suspense } from "react";
+import ChatbotWidget from "@/components/Chatbot/ChatbotWidget";
 
 export const metadata: Metadata = {
   title: {
@@ -131,6 +132,7 @@ export default function RootLayout({
       <body>
         <Providers>
           <Suspense>{children}</Suspense>
+          <ChatbotWidget />
         </Providers>
       </body>
     </html>

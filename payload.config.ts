@@ -346,6 +346,51 @@ export default buildConfig({
                 },
             ],
         },
+        {
+            slug: 'chat-messages',
+            versions: { maxPerDoc: 2 },
+            access: {
+                create: () => true,
+                read: () => true,
+                update: () => true,
+                delete: () => true,
+            },
+            admin: {
+                useAsTitle: 'message',
+            },
+            fields: [
+                {
+                    name: 'user',
+                    type: 'relationship',
+                    relationTo: 'users',
+                    required: true,
+                    label: 'User ID',
+                },
+                {
+                    name: 'message',
+                    type: 'textarea',
+                    required: true,
+                    label: 'Message',
+                },
+                {
+                    name: 'sender',
+                    type: 'select',
+                    options: [
+                        { label: 'User', value: 'user' },
+                        { label: 'Bot', value: 'bot' },
+                    ],
+                    required: true,
+                    label: 'Sender',
+                },
+                {
+                    name: 'timestamp',
+                    type: 'date',
+                    required: true,
+                    defaultValue: () => new Date(),
+                    label: 'Timestamp',
+                },
+            ],
+        },
     ],
     globals: [ // New globals configuration
         {
