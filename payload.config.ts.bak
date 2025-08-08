@@ -346,90 +346,136 @@ export default buildConfig({
                 },
             ],
         },
-        {
-            slug: 'chat-messages',
-            versions: { maxPerDoc: 2 },
-            access: {
-                create: () => true,
-                read: () => true,
-                update: () => true,
-                delete: () => true,
-            },
-            admin: {
-                useAsTitle: 'message',
-            },
-            fields: [
-                {
-                    name: 'user',
-                    type: 'relationship',
-                    relationTo: 'users',
-                    required: true,
-                    label: 'User ID',
-                },
-                {
-                    name: 'message',
-                    type: 'textarea',
-                    required: true,
-                    label: 'Message',
-                },
-                {
-                    name: 'sender',
-                    type: 'select',
-                    options: [
-                        { label: 'User', value: 'user' },
-                        { label: 'Bot', value: 'bot' },
-                    ],
-                    required: true,
-                    label: 'Sender',
-                },
-                {
-                    name: 'timestamp',
-                    type: 'date',
-                    required: true,
-                    defaultValue: () => new Date(),
-                    label: 'Timestamp',
-                },
-            ],
+    },
+{
+        slug: 'chat-messages',
+        versions: { maxPerDoc: 2 },
+        access: {
+            create: () => true,
+            read: () => true,
+            update: () => true,
+            delete: () => true,
         },
-    ],
+        admin: {
+            useAsTitle: 'message',
+        },
+        fields: [
+            {
+                name: 'user',
+                type: 'relationship',
+                relationTo: 'users',
+                required: true,
+                label: 'User ID',
+            },
+            {
+                name: 'message',
+                type: 'textarea',
+                required: true,
+                label: 'Message',
+            },
+            {
+                name: 'sender',
+                type: 'select',
+                options: [
+                    { label: 'User', value: 'user' },
+                    { label: 'Bot', value: 'bot' },
+                ],
+                required: true,
+                label: 'Sender',
+            },
+            {
+                name: 'timestamp',
+                type: 'date',
+                required: true,
+                defaultValue: () => new Date(),
+                label: 'Timestamp',
+            },
+        ],
+    },
+    {
+        slug: 'chat-messages',
+        versions: { maxPerDoc: 2 },
+        access: {
+            create: () => true,
+            read: () => true,
+            update: () => true,
+            delete: () => true,
+        },
+        admin: {
+            useAsTitle: 'message',
+        },
+        fields: [
+            {
+                name: 'user',
+                type: 'relationship',
+                relationTo: 'users',
+                required: true,
+                label: 'User ID',
+            },
+            {
+                name: 'message',
+                type: 'textarea',
+                required: true,
+                label: 'Message',
+            },
+            {
+                name: 'sender',
+                type: 'select',
+                options: [
+                    { label: 'User', value: 'user' },
+                    { label: 'Bot', value: 'bot' },
+                ],
+                required: true,
+                label: 'Sender',
+            },
+            {
+                name: 'timestamp',
+                type: 'date',
+                required: true,
+                defaultValue: () => new Date(),
+                label: 'Timestamp',
+            },
+        ],
+    },
+], // The collections array ends here
     globals: [ // New globals configuration
-        {
-            slug: 'site-settings',
-            label: 'Site Settings',
-            fields: [
-                {
-                    name: 'siteTitle',
-                    type: 'text',
-                    label: 'Site Title',
-                    required: true,
-                },
-                {
-                    name: 'contactEmail',
-                    type: 'email',
-                    label: 'Contact Email',
-                },
-                {
-                    name: 'socialLinks',
-                    type: 'array',
-                    label: 'Social Media Links',
-                    fields: [
-                        {
-                            name: 'platform',
-                            type: 'text',
-                            label: 'Platform (e.g., Twitter, Instagram)',
-                            required: true,
-                        },
-                        {
-                            name: 'url',
-                            type: 'text',
-                            label: 'URL',
-                            required: true,
-                        },
-                    ],
-                },
-            ],
-        },
-    ],
+    {
+        slug: 'site-settings',
+        label: 'Site Settings',
+        fields: [
+            {
+                name: 'siteTitle',
+                type: 'text',
+                label: 'Site Title',
+                required: true,
+            },
+            {
+                name: 'contactEmail',
+                type: 'email',
+                label: 'Contact Email',
+            },
+            {
+                name: 'socialLinks',
+                type: 'array',
+                label: 'Social Media Links',
+                fields: [
+                    {
+                        name: 'platform',
+                        type: 'text',
+                        label: 'Platform (e.g., Twitter, Instagram)',
+                        required: true,
+                    },
+                    {
+                        name: 'url',
+                        type: 'text',
+                        label: 'URL',
+                        required: true,
+                    },
+                ],
+            },
+        ],
+    },
+],
     db: postgresAdapter({
         pool: {
             connectionString: `postgresql://postgres.ecjlvseneqrvbxdhlqxc:$Snowball123@aws-0-ap-south-1.pooler.supabase.com:6543/postgres?pgbouncer=true`,
@@ -437,6 +483,6 @@ export default buildConfig({
     }),
     secret: process.env.PAYLOAD_SECRET || 'your-secret-here',
     typescript: {
-        outputFile: './payload-types.ts',
-    },
+    outputFile: './payload-types.ts',
+},
 });

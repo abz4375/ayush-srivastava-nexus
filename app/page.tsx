@@ -6,6 +6,7 @@ import Experience from "@/components/Experience";
 import Projects from "@/components/Projects";
 import Skills from "@/components/Skills";
 import Contact from "@/components/Contact";
+import ChatbotWidget from "@/components/Chatbot/ChatbotWidget";
 import {
   useHeroContent,
   useExperiences,
@@ -29,6 +30,7 @@ export default function Home() {
       <Projects projects={projects} loading={loadingProjects} />
       <Skills skills={skills} loading={loadingSkills} />
       <Contact contactInfo={contactInfo} loading={loadingContactInfo} heroContent={heroContent} />
+      <ChatbotWidget />
     </div>
   );
 }
