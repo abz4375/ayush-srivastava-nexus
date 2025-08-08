@@ -166,7 +166,7 @@ const ChatbotWidget = () => {
               <TooltipTrigger asChild>
                 <div
                   onClick={toggleChat}
-                  className="fixed bottom-4 right-4 h-16 w-fit px-4 gap-2 text-white rounded-full bg-primary/5 text-primary-foreground backdrop-blur-sm hover:bg-primary/15 flex items-center justify-center cursor-pointer transition-all group"
+                  className="fixed bottom-4 right-4 h-16 w-fit px-4 gap-2 text-white rounded-full bg-primary/50 text-primary-foreground backdrop-blur-sm hover:bg-primary/75 flex items-center justify-center cursor-pointer transition-all group"
                 >
                   <VscTerminalBash className="text-white text-3xl" /> ayush-gpt
                 </div>
