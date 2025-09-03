@@ -194,9 +194,9 @@ const Contact = ({ contactInfo: dbContactInfo, loading, heroContent }: ContactPr
                     </Button>
                   </div>
 
-                  <div className="pt-2 text-xs text-muted-foreground">
+{/*                   <div className="pt-2 text-xs text-muted-foreground">
                     <p>Graduation Year: 2025</p>
-                  </div>
+                  </div> */}
                 </div>
               </CardContent>
             </Card>
