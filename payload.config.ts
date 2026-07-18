@@ -1,6 +1,7 @@
 import { buildConfig } from 'payload';
 import { postgresAdapter } from '@payloadcms/db-postgres';
 import { lexicalEditor } from '@payloadcms/richtext-lexical';
+import { seoPlugin } from '@payloadcms/plugin-seo';
 // Removed webpackBundler import as it's causing module resolution issues
 
 // Supabase URL and key are not directly used in this config, but kept for context if needed elsewhere.
@@ -12,14 +13,6 @@ import { lexicalEditor } from '@payloadcms/richtext-lexical';
 export default buildConfig({
     admin: {
         user: 'users',
-        // Removed bundler configuration as it's causing module resolution issues
-        // components: {
-        //     views: {
-        //         Login: {
-        //           Component: CustomLogin,
-        //         }
-        //     },
-        // },
         importMap: {
             baseDir: process.cwd(),
         },
@@ -34,34 +27,23 @@ export default buildConfig({
                 useAsTitle: 'name', // Correct placement for useAsTitle
             },
             access: {
-                create: () => true,
-                read: () => true,
-                update: () => true,
-                delete: () => true, // Collection level access
+                create: ({ req }) => Boolean(req.user),
+                read: ({ req }) => Boolean(req.user),
+                update: ({ req }) => Boolean(req.user),
+                delete: ({ req }) => Boolean(req.user),
             },
             fields: [
                 {
                     name: 'name',
                     type: 'text',
-                    label: 'Name', // Added label
-                    admin: {
-                        // useAsTitle: true, // Moved to collection admin config
-                    },
+                    label: 'Name',
                 },
                 {
                     name: 'email',
                     type: 'email',
-                    label: 'Email', // Added label
+                    label: 'Email',
                     required: true,
                     unique: true,
-                    admin: {
-                        // readOnly: true, // Removed readOnly to allow email editing
-                    },
-                    access: {
-                        create: () => true,
-                        read: () => true,
-                        update: () => true,
-                    },
                 },
             ],
         },
@@ -69,10 +51,10 @@ export default buildConfig({
             slug: 'hero-content',
             versions: { maxPerDoc: 2 }, // Limit versions to current and previous
             access: {
-                create: () => true,
                 read: () => true,
-                update: () => true,
-                delete: () => true,
+                create: ({ req }) => Boolean(req.user),
+                update: ({ req }) => Boolean(req.user),
+                delete: ({ req }) => Boolean(req.user),
             },
             admin: {
                 useAsTitle: 'name', // useAsTitle at collection level points to a field name
@@ -122,10 +104,10 @@ export default buildConfig({
             slug: 'experiences',
             versions: { maxPerDoc: 2 }, // Limit versions to current and previous
             access: {
-                create: () => true,
                 read: () => true,
-                update: () => true,
-                delete: () => true,
+                create: ({ req }) => Boolean(req.user),
+                update: ({ req }) => Boolean(req.user),
+                delete: ({ req }) => Boolean(req.user),
             },
             admin: {
                 useAsTitle: 'position',
@@ -182,15 +164,19 @@ export default buildConfig({
         },
         {
             slug: 'projects',
-            versions: { maxPerDoc: 2 }, // Limit versions to current and previous
+            versions: {
+                maxPerDoc: 2,
+                drafts: true,
+            },
             access: {
-                create: () => true,
                 read: () => true,
-                update: () => true,
-                delete: () => true,
+                create: ({ req }) => Boolean(req.user),
+                update: ({ req }) => Boolean(req.user),
+                delete: ({ req }) => Boolean(req.user),
             },
             admin: {
                 useAsTitle: 'title',
+                preview: (doc) => `/?preview=true&project=${doc.id}#projects`,
             },
             fields: [
                 {
@@ -202,8 +188,44 @@ export default buildConfig({
                 {
                     name: 'description',
                     type: 'textarea',
-                    label: 'Description', // Added label
+                    label: 'Description (one-line summary for cards)',
                     required: true,
+                },
+                {
+                    name: 'problem',
+                    type: 'textarea',
+                    label: 'Problem — what was broken or missing',
+                },
+                {
+                    name: 'solution',
+                    type: 'textarea',
+                    label: 'Solution — what you built',
+                },
+                {
+                    name: 'architecture',
+                    type: 'textarea',
+                    label: 'Architecture — how it fits together',
+                },
+                {
+                    name: 'keyDecisions',
+                    type: 'array',
+                    label: 'Key Technical Decisions',
+                    fields: [
+                        { name: 'decision', type: 'textarea', label: 'Decision' },
+                    ],
+                },
+                {
+                    name: 'challenges',
+                    type: 'array',
+                    label: 'Challenges',
+                    fields: [
+                        { name: 'challenge', type: 'textarea', label: 'Challenge' },
+                    ],
+                },
+                {
+                    name: 'businessImpact',
+                    type: 'textarea',
+                    label: 'Business Impact — measurable outcomes',
                 },
                 {
                     name: 'duration',
@@ -249,10 +271,10 @@ export default buildConfig({
             slug: 'skills',
             versions: { maxPerDoc: 2 }, // Limit versions to current and previous
             access: {
-                create: () => true,
                 read: () => true,
-                update: () => true,
-                delete: () => true,
+                create: ({ req }) => Boolean(req.user),
+                update: ({ req }) => Boolean(req.user),
+                delete: ({ req }) => Boolean(req.user),
             },
             admin: {
                 useAsTitle: 'category',
@@ -291,10 +313,10 @@ export default buildConfig({
             slug: 'contact-info',
             versions: { maxPerDoc: 2 }, // Limit versions to current and previous
             access: {
-                create: () => true,
                 read: () => true,
-                update: () => true,
-                delete: () => true,
+                create: ({ req }) => Boolean(req.user),
+                update: ({ req }) => Boolean(req.user),
+                delete: ({ req }) => Boolean(req.user),
             },
             admin: {
                 useAsTitle: 'email',
@@ -332,10 +354,10 @@ export default buildConfig({
             slug: 'uploads', // New collection for media uploads
             upload: true,
             access: {
-                create: () => true,
                 read: () => true,
-                update: () => true,
-                delete: () => true,
+                create: ({ req }) => Boolean(req.user),
+                update: ({ req }) => Boolean(req.user),
+                delete: ({ req }) => Boolean(req.user),
             },
             fields: [
                 {
@@ -350,21 +372,28 @@ export default buildConfig({
             slug: 'chat-messages',
             versions: { maxPerDoc: 2 },
             access: {
-                create: () => true,
-                read: () => true,
-                update: () => true,
-                delete: () => true,
+                // Visitor chat history is written by the server (chatbot route, via
+                // the Local API with overrideAccess: true) — never directly by clients.
+                read: ({ req }) => Boolean(req.user),
+                create: ({ req }) => Boolean(req.user),
+                update: ({ req }) => Boolean(req.user),
+                delete: ({ req }) => Boolean(req.user),
             },
             admin: {
                 useAsTitle: 'message',
             },
             fields: [
                 {
+                    name: 'visitorSessionId',
+                    type: 'text',
+                    required: true,
+                    label: 'Anonymous Session ID',
+                },
+                {
                     name: 'user',
                     type: 'relationship',
                     relationTo: 'users',
-                    required: true,
-                    label: 'User ID',
+                    label: 'User (if authenticated)',
                 },
                 {
                     name: 'message',
@@ -404,9 +433,74 @@ export default buildConfig({
                     required: true,
                 },
                 {
+                    name: 'siteUrl',
+                    type: 'text',
+                    label: 'Site URL (e.g. https://sudoayush.netlify.app)',
+                    defaultValue: 'https://sudoayush.netlify.app',
+                },
+                {
+                    name: 'siteDescription',
+                    type: 'textarea',
+                    label: 'Site Description (used for SEO + OpenGraph fallback)',
+                },
+                {
+                    name: 'ogImage',
+                    type: 'upload',
+                    relationTo: 'uploads',
+                    label: 'Default OpenGraph / Social Share Image',
+                },
+                {
+                    name: 'favicon',
+                    type: 'upload',
+                    relationTo: 'uploads',
+                    label: 'Favicon',
+                },
+                {
+                    name: 'twitterHandle',
+                    type: 'text',
+                    label: 'Twitter/X Handle (e.g. @abz4375)',
+                },
+                {
                     name: 'contactEmail',
                     type: 'email',
                     label: 'Contact Email',
+                },
+                {
+                    name: 'brandName',
+                    type: 'text',
+                    label: 'Brand Name (shown in nav bar)',
+                    defaultValue: 'sudo ayush',
+                },
+                {
+                    name: 'brandIcon',
+                    type: 'select',
+                    label: 'Brand Icon',
+                    options: [
+                        { label: 'Terminal', value: 'terminal' },
+                        { label: 'Code', value: 'code' },
+                        { label: 'Hash', value: 'hash' },
+                    ],
+                    defaultValue: 'terminal',
+                },
+                {
+                    name: 'personName',
+                    type: 'text',
+                    label: 'Full Name (JSON-LD Person schema)',
+                },
+                {
+                    name: 'personJobTitle',
+                    type: 'text',
+                    label: 'Job Title (JSON-LD Person schema)',
+                },
+                {
+                    name: 'personAlmaMater',
+                    type: 'text',
+                    label: 'Alma Mater (JSON-LD Person schema)',
+                },
+                {
+                    name: 'personWorksFor',
+                    type: 'text',
+                    label: 'Current Employer (JSON-LD Person schema)',
                 },
                 {
                     name: 'socialLinks',
@@ -430,10 +524,20 @@ export default buildConfig({
             ],
         },
     ],
+    plugins: [
+        seoPlugin({
+            collections: ['projects'],
+            globals: ['site-settings'],
+            uploadsCollection: 'uploads',
+            generateTitle: ({ doc }: any) => (doc?.title ? `${doc.title} | Ayush Srivastava` : 'Ayush Srivastava'),
+            generateDescription: ({ doc }: any) => doc?.businessImpact || doc?.description || doc?.siteDescription,
+        }),
+    ],
     db: postgresAdapter({
         pool: {
-            connectionString: `postgresql://postgres.ecjlvseneqrvbxdhlqxc:$Snowball123@aws-0-ap-south-1.pooler.supabase.com:6543/postgres?pgbouncer=true`,
+            connectionString: process.env.DATABASE_URL,
         },
+        push: process.env.NODE_ENV !== 'production',
     }),
     secret: process.env.PAYLOAD_SECRET || 'your-secret-here',
     typescript: {

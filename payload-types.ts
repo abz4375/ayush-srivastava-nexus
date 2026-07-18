@@ -74,6 +74,8 @@ export interface Config {
     skills: Skill;
     'contact-info': ContactInfo;
     uploads: Upload;
+    'chat-messages': ChatMessage;
+    'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -87,6 +89,8 @@ export interface Config {
     skills: SkillsSelect<false> | SkillsSelect<true>;
     'contact-info': ContactInfoSelect<false> | ContactInfoSelect<true>;
     uploads: UploadsSelect<false> | UploadsSelect<true>;
+    'chat-messages': ChatMessagesSelect<false> | ChatMessagesSelect<true>;
+    'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -94,6 +98,7 @@ export interface Config {
   db: {
     defaultIDType: number;
   };
+  fallbackLocale: null;
   globals: {
     'site-settings': SiteSetting;
   };
@@ -101,9 +106,10 @@ export interface Config {
     'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
   };
   locale: null;
-  user: User & {
-    collection: 'users';
+  widgets: {
+    collections: CollectionsWidget;
   };
+  user: User;
   jobs: {
     tasks: unknown;
     workflows: unknown;
@@ -151,6 +157,7 @@ export interface User {
       }[]
     | null;
   password?: string | null;
+  collection: 'users';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -176,6 +183,7 @@ export interface Experience {
   id: number;
   position: string;
   company: string;
+  duration?: string | null;
   achievements?:
     | {
         achievement?: string | null;
@@ -200,6 +208,22 @@ export interface Project {
   id: number;
   title: string;
   description: string;
+  problem?: string | null;
+  solution?: string | null;
+  architecture?: string | null;
+  keyDecisions?:
+    | {
+        decision?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  challenges?:
+    | {
+        challenge?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  businessImpact?: string | null;
   duration?: string | null;
   technologies?:
     | {
@@ -211,8 +235,36 @@ export interface Project {
   demo_url?: string | null;
   image_url?: string | null;
   sort_order?: number | null;
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Upload;
+  };
   updatedAt: string;
   createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "uploads".
+ */
+export interface Upload {
+  id: number;
+  alt: string;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -250,22 +302,34 @@ export interface ContactInfo {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "uploads".
+ * via the `definition` "chat-messages".
  */
-export interface Upload {
+export interface ChatMessage {
   id: number;
-  alt: string;
+  visitorSessionId: string;
+  user?: (number | null) | User;
+  message: string;
+  sender: 'user' | 'bot';
+  timestamp: string;
   updatedAt: string;
   createdAt: string;
-  url?: string | null;
-  thumbnailURL?: string | null;
-  filename?: string | null;
-  mimeType?: string | null;
-  filesize?: number | null;
-  width?: number | null;
-  height?: number | null;
-  focalX?: number | null;
-  focalY?: number | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-kv".
+ */
+export interface PayloadKv {
+  id: number;
+  key: string;
+  data:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -301,6 +365,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'uploads';
         value: number | Upload;
+      } | null)
+    | ({
+        relationTo: 'chat-messages';
+        value: number | ChatMessage;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -389,6 +457,7 @@ export interface HeroContentSelect<T extends boolean = true> {
 export interface ExperiencesSelect<T extends boolean = true> {
   position?: T;
   company?: T;
+  duration?: T;
   achievements?:
     | T
     | {
@@ -412,6 +481,22 @@ export interface ExperiencesSelect<T extends boolean = true> {
 export interface ProjectsSelect<T extends boolean = true> {
   title?: T;
   description?: T;
+  problem?: T;
+  solution?: T;
+  architecture?: T;
+  keyDecisions?:
+    | T
+    | {
+        decision?: T;
+        id?: T;
+      };
+  challenges?:
+    | T
+    | {
+        challenge?: T;
+        id?: T;
+      };
+  businessImpact?: T;
   duration?: T;
   technologies?:
     | T
@@ -423,8 +508,16 @@ export interface ProjectsSelect<T extends boolean = true> {
   demo_url?: T;
   image_url?: T;
   sort_order?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
+  _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -475,6 +568,27 @@ export interface UploadsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "chat-messages_select".
+ */
+export interface ChatMessagesSelect<T extends boolean = true> {
+  visitorSessionId?: T;
+  user?: T;
+  message?: T;
+  sender?: T;
+  timestamp?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-kv_select".
+ */
+export interface PayloadKvSelect<T extends boolean = true> {
+  key?: T;
+  data?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents_select".
  */
 export interface PayloadLockedDocumentsSelect<T extends boolean = true> {
@@ -512,7 +626,18 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
 export interface SiteSetting {
   id: number;
   siteTitle: string;
+  siteUrl?: string | null;
+  siteDescription?: string | null;
+  ogImage?: (number | null) | Upload;
+  favicon?: (number | null) | Upload;
+  twitterHandle?: string | null;
   contactEmail?: string | null;
+  brandName?: string | null;
+  brandIcon?: ('terminal' | 'code' | 'hash') | null;
+  personName?: string | null;
+  personJobTitle?: string | null;
+  personAlmaMater?: string | null;
+  personWorksFor?: string | null;
   socialLinks?:
     | {
         platform: string;
@@ -520,6 +645,14 @@ export interface SiteSetting {
         id?: string | null;
       }[]
     | null;
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Upload;
+  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -529,7 +662,18 @@ export interface SiteSetting {
  */
 export interface SiteSettingsSelect<T extends boolean = true> {
   siteTitle?: T;
+  siteUrl?: T;
+  siteDescription?: T;
+  ogImage?: T;
+  favicon?: T;
+  twitterHandle?: T;
   contactEmail?: T;
+  brandName?: T;
+  brandIcon?: T;
+  personName?: T;
+  personJobTitle?: T;
+  personAlmaMater?: T;
+  personWorksFor?: T;
   socialLinks?:
     | T
     | {
@@ -537,9 +681,26 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         url?: T;
         id?: T;
       };
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "collections_widget".
+ */
+export interface CollectionsWidget {
+  data?: {
+    [k: string]: unknown;
+  };
+  width: 'full';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

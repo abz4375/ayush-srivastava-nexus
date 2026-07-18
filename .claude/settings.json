@@ -1,0 +1,28 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cat *)",
+      "Bash(ls *)",
+      "Bash(find *)",
+      "Bash(grep *)",
+      "Bash(curl -s *)",
+      "Bash(tail *)",
+      "Bash(head *)",
+      "Bash(sleep *)",
+      "Bash(mkdir -p *)",
+      "Bash(node -v)",
+      "Bash(node --version)",
+      "Bash(which claude)",
+      "Bash(powershell -Command \"Get-Process*\")",
+      "mcp__claude-in-chrome__tabs_context_mcp",
+      "mcp__claude-in-chrome__navigate",
+      "mcp__claude-in-chrome__computer",
+      "mcp__claude-in-chrome__browser_batch",
+      "mcp__claude-in-chrome__read_console_messages",
+      "mcp__payloadcms-docs__search_payload_documentation",
+      "mcp__payloadcms-docs__search_payload_code",
+      "mcp__payloadcms-docs__fetch_payload_documentation",
+      "mcp__payloadcms-docs__fetch_generic_url_content"
+    ]
+  }
+}

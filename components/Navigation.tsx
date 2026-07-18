@@ -1,13 +1,20 @@
 'use client'
 
 import { useState, useEffect } from "react";
+import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Sun, Moon } from "lucide-react";
 import { VscTerminalBash } from "react-icons/vsc";
 
 const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const { resolvedTheme, setTheme } = useTheme();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -42,8 +49,8 @@ const Navigation = () => {
             onClick={() => scrollToSection('hero')}
             className="text-lg font-bold bg-gradient-primary bg-clip-text text-transparent hover:opacity-80 transition-opacity flex items-center gap-2"
           >
-            <VscTerminalBash className="text-white text-2xl" />
-            sudo ayush 
+            <VscTerminalBash className="text-foreground text-2xl" />
+            sudo ayush
           </button>
 
           {/* Desktop Navigation */}
@@ -57,17 +64,37 @@ const Navigation = () => {
                 {item.label}
               </button>
             ))}
+            <Button
+              variant="ghost"
+              size="sm"
+              aria-label="Toggle color theme"
+              className="text-muted-foreground hover:text-primary"
+              onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
+            >
+              {mounted && resolvedTheme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+            </Button>
           </div>
 
           {/* Mobile Menu Button */}
-          <Button
-            variant="ghost"
-            size="sm"
-            className="md:hidden text-muted-foreground hover:text-primary"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          >
-            {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </Button>
+          <div className="flex items-center gap-1 md:hidden">
+            <Button
+              variant="ghost"
+              size="sm"
+              aria-label="Toggle color theme"
+              className="text-muted-foreground hover:text-primary"
+              onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
+            >
+              {mounted && resolvedTheme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="text-muted-foreground hover:text-primary"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            >
+              {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </Button>
+          </div>
         </div>
 
         {/* Mobile Navigation */}

@@ -1,12 +1,5 @@
-// @ts-nocheck
-import { GeminiClient } from '../gemini/GeminiClient';
-
-interface ChatMessage {
-    user?: string;
-    message: string;
-    sender: 'user' | 'bot';
-    timestamp: string;
-}
+import { GeminiClient, ChatMessage } from '../gemini/GeminiClient';
+import { getPortfolioData } from '../payload/getPortfolioData';
 
 export class ChatbotService {
     private geminiClient: GeminiClient;
@@ -17,15 +10,9 @@ export class ChatbotService {
 
     private async fetchPortfolioData(): Promise<any | null> {
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/portfolio`); // Assuming the API is on the same host
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            const data = await response.json();
-            // // console.log('Fetched portfolio data:', data);
-            return data;
+            return await getPortfolioData();
         } catch (error) {
-            console.error('Error fetching portfolio data from API:', error);
+            console.error('Error fetching portfolio data from Payload:', error);
             return null;
         }
     }

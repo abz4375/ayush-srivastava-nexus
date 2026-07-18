@@ -54,13 +54,13 @@ const Hero = ({ heroContent, loading }: HeroProps) => {
       <div className="container mx-auto px-4 sm:px-6 relative z-10 mt-[72px]">
         <div className="flex flex-col lg:flex-row items-center justify-center gap-12">
           {/* Image */}
-          <div className="flex-shrink-0">
+          <div className="flex-shrink-0 rounded-full bg-zinc-300 dark:bg-transparent p-1 dark:p-0 shadow-elegant">
             <Image
               src="/ayush.png"
               alt="Ayush Srivastava"
               width={150}
               height={150}
-              className="rounded-full border-4 border-primary/20 object-cover shadow-elegant lg:w-[200px] lg:h-[200px]"
+              className="rounded-full border-4 border-primary/20 object-cover lg:w-[200px] lg:h-[200px]"
               priority
             />
           </div>

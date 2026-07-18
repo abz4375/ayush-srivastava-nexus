@@ -3,6 +3,7 @@
 import config from '@/payload.config'
 import '@payloadcms/next/css'
 import { RootPage } from '@payloadcms/next/views'
+import { importMap } from '../importMap.js'
 
 interface Props {
   params: Promise<{ segments: string[] }>
@@ -12,9 +13,7 @@ interface Props {
 export default async function Page({ params, searchParams }: Props) {
   return RootPage({
     config,
-    importMap: {
-      baseDir: process.cwd(),
-    },
+    importMap,
     params,
     searchParams,
   })

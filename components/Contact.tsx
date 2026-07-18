@@ -2,7 +2,7 @@
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Github, Linkedin, Mail, Phone, MapPin, Download } from "lucide-react";
+import { Github, Linkedin, Mail, MapPin, Download } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 
 interface ContactProps {
@@ -70,12 +70,6 @@ const Contact = ({ contactInfo: dbContactInfo, loading, heroContent }: ContactPr
       label: "Email",
       value: dbContactInfo?.email || "abz4375.ayushsrivastava@gmail.com",
       href: `mailto:${dbContactInfo?.email || "abz4375.ayushsrivastava@gmail.com"}`
-    },
-    {
-      icon: Phone,
-      label: "Phone",
-      value: dbContactInfo?.phone || "+91 8955848239",
-      href: `tel:${dbContactInfo?.phone || "+918955848239"}`
     },
     {
       icon: MapPin,

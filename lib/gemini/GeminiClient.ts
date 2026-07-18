@@ -1,7 +1,7 @@
 import { GoogleGenerativeAI, Content } from '@google/generative-ai';
 
-interface ChatMessage {
-  user: string;
+export interface ChatMessage {
+  user?: string;
   message: string;
   sender: 'user' | 'bot';
   timestamp: string;

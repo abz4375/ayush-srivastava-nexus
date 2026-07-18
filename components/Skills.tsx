@@ -95,29 +95,6 @@ const Skills = ({ skills, loading }: SkillsProps) => {
             );
           })}
         </div>
-
-        {/* Additional highlight section */}
-        <div className="mt-12 max-w-4xl mx-auto">
-          <Card className="border-glow bg-gradient-secondary text-foreground">
-            <CardContent className="p-6 text-center">
-              <h3 className="text-xl font-bold mb-2">Currently Exploring</h3>
-              <p className="text-md text-muted-foreground mb-4">
-                Continuously learning and adapting to new technologies.
-              </p>
-              <div className="flex flex-wrap justify-center gap-2">
-                {["AI/ML Integration", "Cloud Architecture", "DevOps", "Web3", "Microservices"].map((tech, index) => (
-                  <Badge 
-                    key={index} 
-                    variant="outline" 
-                    className="text-xs"
-                  >
-                    {tech}
-                  </Badge>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </div>
       </div>
     </section>
   );

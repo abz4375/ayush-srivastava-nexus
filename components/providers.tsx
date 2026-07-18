@@ -1,7 +1,7 @@
 'use client'
 
-import { QueryProvider } from '@/app/providers/query-provider'
-import { ThemeProvider } from '@/app/providers/theme-provider'
+import { QueryProvider } from '@/app/(frontend)/providers/query-provider'
+import { ThemeProvider } from '@/app/(frontend)/providers/theme-provider'
 import { Toaster } from "@/components/ui/toaster"
 import { Toaster as Sonner } from "@/components/ui/sonner"
 import { TooltipProvider } from "@/components/ui/tooltip"
