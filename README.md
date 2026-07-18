@@ -1,94 +1,57 @@
-# Ayush Srivastava - Personal Portfolio 🚀
+# Portfolio
 
-This repository hosts the personal portfolio website of Ayush Srivastava, showcasing his projects, experience, skills, and contact information.
+My personal portfolio site — Next.js on the frontend, backed by Payload CMS so the content (experience, projects, skills) is editable through an admin panel instead of being hardcoded into components.
 
-## Technologies Used 💻
+## Why
 
-- Next.js
-- React
-- TypeScript
-- Tailwind CSS
-- Payload CMS (for content management)
-- Supabase (for database and authentication)
+Most portfolio sites are static — updating them means editing and redeploying code. This one runs on Payload CMS with Supabase as the underlying Postgres database, so sections like Experience and Projects are content models I can update from an admin UI without touching the frontend.
 
-## Features ✨
+## Features
 
-- **Hero Section**: Introduction to Ayush Srivastava.
-- **About Section**: Detailed information about Ayush.
-- **Skills Section**: Overview of technical skills.
-- **Experience Section**: Professional experience and roles.
-- **Projects Section**: Showcase of personal and professional projects.
-- **Contact Section**: Form for inquiries and contact details.
-- **Responsive Design**: Optimized for various devices.
-- **CMS Integration**: Easily manage content via Payload CMS.
+- Content-managed sections (Hero, Skills, Experience, Projects, Contact) via Payload CMS collections
+- Supabase/Postgres as the CMS database
+- An integrated chatbot that can answer questions about my background
+- Responsive layout, built with Tailwind CSS
 
-## Getting Started 🚀
+## Tech Stack
 
-To run this project locally, follow these steps:
+Next.js, TypeScript, Tailwind CSS, Payload CMS, Supabase
 
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/abz4375/ayush-srivastava-nexus.git
-   cd ayush-srivastava-nexus
-   ```
+## Local Setup
 
-2. **Install dependencies:**
-   ```bash
-   npm install
-   # or yarn install
-   # or pnpm install
-   # or bun install
-   ```
-
-3. **Set up environment variables:**
-   Create a `.env.local` file in the root directory and add the following:
-
-   ```
-   NEXT_PUBLIC_SERVER_URL=http://localhost:3000
-   PAYLOAD_SECRET=YOUR_PAYLOAD_SECRET_HERE
-   NEXT_REVALIDATION_TAGS=YOUR_REVALIDATION_TAGS_HERE
-   SUPABASE_URL=YOUR_SUPABASE_URL_HERE
-   SUPABASE_ANON_KEY=YOUR_SUPABASE_ANON_KEY_HERE
-   ```
-   Replace the placeholder values with your actual secrets and keys.
-
-4. **Run the development server:**
-   ```bash
-   npm run dev
-   ```
-
-   Open [http://localhost:3000](http://localhost:3000) in your browser to see the result.
-
-## Payload CMS 📝
-
-This project uses Payload CMS for content management. To access the admin panel:
-
-1. Ensure the development server is running (`npm run dev`).
-2. Navigate to [http://localhost:3000/admin](http://localhost:3000/admin).
-3. Create an admin user if you haven't already.
-
-## Project Structure 📂
-
-```
-.
-├── app/                  # Next.js application pages and API routes
-├── components/           # Reusable React components
-├── hooks/                # Custom React hooks
-├── integrations/         # Integrations with external services (e.g., Supabase)
-├── lib/                  # Utility functions
-├── public/               # Static assets
-├── src/                  # Payload CMS configuration and migrations
-├── supabase/             # Supabase specific files
-├── payload.config.ts     # Payload CMS configuration
-├── next.config.ts        # Next.js configuration
-├── tailwind.config.js    # Tailwind CSS configuration
-└── tsconfig.json         # TypeScript configuration
+```bash
+git clone https://github.com/abz4375/ayush-srivastava-nexus.git
+cd ayush-srivastava-nexus
+npm install
 ```
 
-## Contact 📧
+Copy `.env.example` to `.env.local` and fill in your own Payload secret and Supabase credentials:
 
-For any inquiries, please reach out via the contact form on the website or connect with Ayush Srivastava through the provided social links.
+```
+NEXT_PUBLIC_SERVER_URL=http://localhost:3000
+PAYLOAD_SECRET=your_payload_secret
+SUPABASE_URL=your_supabase_url
+SUPABASE_ANON_KEY=your_supabase_anon_key
+```
 
----
+```bash
+npm run dev
+```
 
-© 2025 Ayush Srivastava. All Rights Reserved.
+Open `http://localhost:3000`. The Payload admin panel is at `http://localhost:3000/admin` — you'll be prompted to create an admin user on first run.
+
+## Project Structure
+
+```
+app/          # Next.js pages and API routes
+components/   # React components
+hooks/        # Custom hooks
+lib/          # Utilities
+payload.config.ts  # Payload CMS collections and config
+supabase/     # Supabase-specific config
+```
+
+## Future Improvements
+
+- Finish moving the remaining hardcoded sections onto Payload collections
+- Deploy publicly and link it from the profile README
