@@ -6,9 +6,9 @@
  * replies never change it.
  */
 
-export type EmotionId = "calm" | "curious" | "amused" | "wary" | "cold";
+export type EmotionId = "calm" | "curious" | "amused" | "shy" | "wary" | "cold";
 
-export const EMOTION_IDS: readonly EmotionId[] = ["calm", "curious", "amused", "wary", "cold"];
+export const EMOTION_IDS: readonly EmotionId[] = ["calm", "curious", "amused", "shy", "wary", "cold"];
 
 export const DEFAULT_EMOTION: EmotionId = "calm";
 
@@ -35,6 +35,7 @@ export const EMOTION_EMOJI: Record<EmotionId, string> = {
   calm: "🌱",
   curious: "👀",
   amused: "😄",
+  shy: "😊",
   wary: "😒",
   cold: "🥶",
 };
@@ -65,6 +66,12 @@ export const EMOTIONS: Record<EmotionId, EmotionMeta> = {
     deep: "#0c3a52",
     thinking: "#7dd3fc",
     phrases: ["Groot is listening...", "Hm. Groot wonders...", "Leaning in..."],
+  },
+  shy: {
+    glow: "#f472b6",
+    deep: "#4a1535",
+    thinking: "#f9a8d4",
+    phrases: ["Um...", "Groot looks away...", "Hm. Thank you..."],
   },
   amused: {
     glow: "#a3e635",
@@ -108,7 +115,7 @@ export function clipForEmotion(lines: string[], emotion: EmotionId): string[] {
 export function moodBrief(current: EmotionId): string[] {
   return [
     `GROOT'S CURRENT MOOD: ${current}.`,
-    "Moods: calm (default, warm and plain), curious (a little warmer), amused (quietly pleased), wary (flat, one or two short sentences), cold (one short flat sentence).",
+    "Moods: calm (default, warm and plain), curious (a little warmer), amused (quietly pleased), shy (flustered and soft when a visitor is lovely, sweet or flirty with Groot: a few short, bashful words, a little hesitant, never gushing), wary (flat, one or two short sentences), cold (one short flat sentence).",
     "Judge the visitor's newest message against the transcript. Pointless, rude or insulting messages, especially repeated ones, move the mood one step cooler: calm to wary to cold. Kind or sensible messages move it back toward calm.",
     "Cooler moods mean shorter replies. Never sarcastic, never say you are annoyed, never break character, never explain the mood.",
     "Begin the reply with its mood tag on its own, exactly like [mood: calm | 🌱], then the reply text. The tag is mandatory and is never shown to the visitor.",
