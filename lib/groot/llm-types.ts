@@ -98,6 +98,8 @@ export interface LlmAnswer {
   model: string;
   /** Mood the model reported for this turn, if it reported a valid one. */
   emotion?: EmotionId;
+  /** Emoji the model chose for this turn's mood, if it gave a valid one. */
+  emoji?: string;
 }
 
 export interface LlmFailureResult {

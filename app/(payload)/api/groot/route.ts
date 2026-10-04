@@ -5,7 +5,7 @@ import { classifyRoute, outageOutcomeFor, routeOutcomeFor } from "@/lib/groot/cl
 import { askGroot } from "@/lib/groot/llm";
 import { UNKNOWN_INTENT_ID, classify } from "@/lib/groot/intents";
 import type { IntentId } from "@/lib/groot/intents";
-import { EMOTION_IDS, type EmotionId } from "@/lib/groot/emotion";
+import { DEFAULT_EMOTION, EMOTION_EMOJI, EMOTION_IDS, type EmotionId } from "@/lib/groot/emotion";
 import type { PromptTurn } from "@/lib/groot/prompt";
 
 /**
@@ -265,9 +265,12 @@ export async function POST(request: Request): Promise<Response> {
     // `intentId` is null because no intent produced this text. Sending an
     // intent id here would let the widget fire a section scroll off a reply
     // that has nothing to do with that section.
+    const moodChanged = Boolean(answer.emotion) && answer.emotion !== (parsed.data.emotion ?? DEFAULT_EMOTION);
+    const emoji = answer.emoji ?? (answer.emotion ? EMOTION_EMOJI[answer.emotion] : "");
+
     return succeed({
       mode: "llm",
-      reply: answer.text,
+      reply: moodChanged && emoji ? `${emoji} ${answer.text}` : answer.text,
       intentId: null,
       confidence: local.confidence,
       emotion: answer.emotion,

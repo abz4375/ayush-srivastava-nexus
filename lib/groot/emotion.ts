@@ -12,20 +12,32 @@ export const EMOTION_IDS: readonly EmotionId[] = ["calm", "curious", "amused", "
 
 export const DEFAULT_EMOTION: EmotionId = "calm";
 
-const MOOD_TAG = /\[\s*mood\s*:\s*([a-z]+)\s*\]/gi;
+const MOOD_TAG = /\[\s*mood\s*:\s*([a-z]+)\s*(?:[|,]\s*([^\]]*?))?\s*\]/gi;
+const EMOJI = /^\p{Extended_Pictographic}[\p{Extended_Pictographic}‍️\p{Emoji_Modifier}]*$/u;
 
-/** Splits the leading or trailing mood tag off a model reply. Never throws. */
-export function parseMoodReply(raw: string): { text: string; emotion?: EmotionId } {
+/** Splits the mood tag, and the emoji the model picked for it, off a model reply. Never throws. */
+export function parseMoodReply(raw: string): { text: string; emotion?: EmotionId; emoji?: string } {
   let emotion: EmotionId | undefined;
+  let emoji: string | undefined;
   const text = raw
-    .replace(MOOD_TAG, (_, id: string) => {
+    .replace(MOOD_TAG, (_, id: string, pick?: string) => {
       const found = EMOTION_IDS.find((e) => e === id.toLowerCase());
       if (found) emotion = found;
+      const candidate = pick?.trim();
+      if (candidate && EMOJI.test(candidate)) emoji = candidate;
       return "";
     })
     .trim();
-  return { text, emotion };
+  return { text, emotion, emoji };
 }
+
+export const EMOTION_EMOJI: Record<EmotionId, string> = {
+  calm: "🌱",
+  curious: "👀",
+  amused: "😄",
+  wary: "😒",
+  cold: "🥶",
+};
 
 interface EmotionMeta {
   /** Orb glow and body, plus the ring colour while speaking and thinking. */
@@ -99,6 +111,7 @@ export function moodBrief(current: EmotionId): string[] {
     "Moods: calm (default, warm and plain), curious (a little warmer), amused (quietly pleased), wary (flat, one or two short sentences), cold (one short flat sentence).",
     "Judge the visitor's newest message against the transcript. Pointless, rude or insulting messages, especially repeated ones, move the mood one step cooler: calm to wary to cold. Kind or sensible messages move it back toward calm.",
     "Cooler moods mean shorter replies. Never sarcastic, never say you are annoyed, never break character, never explain the mood.",
-    "Begin the reply with its mood tag on its own, exactly like [mood: calm], then the reply text. The tag is mandatory and is never shown to the visitor.",
+    "Begin the reply with its mood tag on its own, exactly like [mood: calm | 🌱], then the reply text. The tag is mandatory and is never shown to the visitor.",
+    "After the bar put exactly one emoji that fits the mood AND the whole conversation so far, the topic and the visitor's last message, not a generic face. It is shown to the visitor in front of the reply when the mood changes.",
   ];
 }

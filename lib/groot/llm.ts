@@ -189,9 +189,9 @@ export async function askGroot(args: AskArgs): Promise<LlmResult> {
     const outcome = await attempt.run(args);
 
     if (outcome.kind === "ok") {
-      const { text, emotion } = parseMoodReply(outcome.text);
+      const { text, emotion, emoji } = parseMoodReply(outcome.text);
       if (!text) return { ok: false, reason: "empty" };
-      return { ok: true, text, emotion, model: attempt.model };
+      return { ok: true, text, emotion, emoji, model: attempt.model };
     }
 
     // This model is gone or out of quota. The next rung has its own budget, so
