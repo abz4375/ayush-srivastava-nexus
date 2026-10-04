@@ -213,6 +213,17 @@ export const INTENT_BY_ID: ReadonlyMap<IntentId, Intent> = new Map(
   INTENTS.map((intent) => [intent.id, intent]),
 );
 
+/**
+ * The id that means "the table has no answer for this".
+ *
+ * Named rather than written inline at each use site because it now carries a
+ * rule, not just a value: `unknown` is the *last* answer, reached only when the
+ * model could not be reached. The route branches on it, and a branch that
+ * compared a string literal would read as a coincidence instead of as the policy
+ * it implements.
+ */
+export const UNKNOWN_INTENT_ID = "unknown" as const;
+
 /** Every slash command, sorted for palette display. */
 export const COMMANDS: readonly string[] = INTENTS.filter((i) => i.command)
   .map((i) => i.command as string)

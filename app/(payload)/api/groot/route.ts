@@ -3,7 +3,7 @@ import { z } from "zod";
 import { AGENT_NAME } from "@/lib/groot/agent";
 import { classifyRoute, outageOutcomeFor, routeOutcomeFor } from "@/lib/groot/classifier";
 import { askGroot } from "@/lib/groot/llm";
-import { classify } from "@/lib/groot/intents";
+import { UNKNOWN_INTENT_ID, classify } from "@/lib/groot/intents";
 import type { IntentId } from "@/lib/groot/intents";
 import type { PromptTurn } from "@/lib/groot/prompt";
 
@@ -219,13 +219,27 @@ export async function POST(request: Request): Promise<Response> {
     // call.
     const outcome = routed.ok ? routeOutcomeFor(routed) : outageOutcomeFor(text);
 
-    if (outcome === "deterministic") {
-      // `classify` can still land on `unknown` for a message the provider called
-      // table-shaped. That is correct and honest: `unknown` has a written reply
-      // that points at the sections worth reading.
-      const response = tableResponse();
-      if (response) return response;
+    if (outcome === "deterministic" && local.intent.id !== UNKNOWN_INTENT_ID) {
+      return tableResponse() ?? fail("unavailable");
     }
+
+    /*
+      The classifier's whole job is to choose between two things: an action the
+      intent table can perform, and the model. It is not a third vote on whether
+      to answer, and it cannot supply content.
+
+      So when it says "table" but the table landed on `unknown`, there is no
+      action to perform and nothing to say — which is not a reason to decline, it
+      is a reason to ask the model. Returning `unknown`'s written reply here is
+      what made a reachable model look broken: the visitor got "Groot does not
+      know that" for a question Groot could have answered, and the only trace was
+      a `deterministic` mode on a response that had never tried.
+
+      `unknown`'s reply is still the right answer in the two places where the
+      model genuinely cannot be reached — no key configured, and `answer.ok ===
+      false` below. Those are the only two, and that is the rule: the fallback
+      exists for an unreachable model, never for a reachable one.
+    */
 
     const answer = await askGroot({ question: text, turns, agentName: AGENT_NAME });
 
