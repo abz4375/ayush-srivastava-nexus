@@ -420,6 +420,67 @@ export default buildConfig({
                 },
             ],
         },
+        {
+            slug: 'contact-submissions',
+            versions: { maxPerDoc: 2 },
+            access: {
+                // Written only by the /api/contact route through the Local API
+                // with overrideAccess: true. Clients never touch this directly.
+                read: ({ req }) => Boolean(req.user),
+                create: ({ req }) => Boolean(req.user),
+                update: ({ req }) => Boolean(req.user),
+                delete: ({ req }) => Boolean(req.user),
+            },
+            admin: {
+                useAsTitle: 'name',
+                defaultColumns: ['name', 'email', 'company', 'createdAt'],
+            },
+            fields: [
+                {
+                    name: 'name',
+                    type: 'text',
+                    required: true,
+                    label: 'Name',
+                },
+                {
+                    name: 'email',
+                    type: 'email',
+                    required: true,
+                    label: 'Email',
+                },
+                {
+                    name: 'company',
+                    type: 'text',
+                    label: 'Company / Organisation',
+                },
+                {
+                    name: 'message',
+                    type: 'textarea',
+                    required: true,
+                    label: 'Message',
+                },
+                {
+                    name: 'intent',
+                    type: 'text',
+                    label: 'Originating intent',
+                    defaultValue: 'contact',
+                },
+                {
+                    name: 'userAgent',
+                    type: 'text',
+                    label: 'User agent',
+                    admin: { disableBulkEdit: true },
+                },
+                {
+                    // Honeypot. Hidden from humans, so any value means a bot
+                    // filled it in. Never validate or require it.
+                    name: 'website',
+                    type: 'text',
+                    label: 'Website (leave blank)',
+                    admin: { disableBulkEdit: true },
+                },
+            ],
+        },
     ],
     globals: [ // New globals configuration
         {

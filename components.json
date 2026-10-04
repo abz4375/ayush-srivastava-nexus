@@ -1,20 +1,30 @@
 {
   "$schema": "https://ui.shadcn.com/schema.json",
   "style": "default",
-  "rsc": false,
+  "rsc": true,
   "tsx": true,
   "tailwind": {
-    "config": "tailwind.config.ts",
-    "css": "src/index.css",
-    "baseColor": "slate",
+    "config": "",
+    "css": "app/(frontend)/globals.css",
+    "baseColor": "neutral",
     "cssVariables": true,
     "prefix": ""
   },
+  "iconLibrary": "lucide",
   "aliases": {
     "components": "@/components",
-    "utils": "@/lib/utils",
     "ui": "@/components/ui",
     "lib": "@/lib",
-    "hooks": "@/hooks"
+    "hooks": "@/hooks",
+    "utils": "@/lib/utils"
+  },
+  "registries": {
+    "@shadercn": "https://shadercn.run/r/{name}.json",
+    "@termcn": "https://termcn.vercel.app/r/{name}.json",
+    "@mcpcn": "https://mcpcn.dev/r/{name}.json",
+    "@ui-layouts": "https://ui-layouts.com/r/{name}.json",
+    "@magicui": "https://magicui.design/r/{name}.json",
+    "@ogimagecn": "https://ogimagecn.vercel.app/r/{name}.json",
+    "@shadcnblocks": "https://www.shadcnblocks.com/r/{style}/{name}"
   }
 }

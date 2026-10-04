@@ -87,6 +87,7 @@ const Projects = ({ projects, loading }: ProjectsProps) => {
                       src={project.image_url || ''}
                       alt={project.title || 'Project Image'}
                       fill
+                      sizes="(min-width: 1280px) 33vw, (min-width: 1024px) 50vw, 100vw"
                       style={{ objectFit: 'cover' }}
                       className="group-hover:scale-105 transition-transform duration-300"
                     />

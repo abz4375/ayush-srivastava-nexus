@@ -116,6 +116,7 @@ const Hero = ({ heroContent, loading }: HeroProps) => {
               href={heroContent.github_url}
               target="_blank"
               rel="noopener noreferrer"
+              aria-label="GitHub profile"
               className="p-3 rounded-full bg-background/50 hover:bg-accent transition-all duration-300 hover:shadow-elegant"
             >
               <Github className="h-5 w-5" />
@@ -127,6 +128,7 @@ const Hero = ({ heroContent, loading }: HeroProps) => {
               href={heroContent.linkedin_url}
               target="_blank"
               rel="noopener noreferrer"
+              aria-label="LinkedIn profile"
               className="p-3 rounded-full bg-background/50 hover:bg-accent transition-all duration-300 hover:shadow-elegant"
             >
               <Linkedin className="h-5 w-5" />
@@ -135,6 +137,7 @@ const Hero = ({ heroContent, loading }: HeroProps) => {
           
           <a
             href="mailto:abz4375.ayushsrivastava@gmail.com"
+            aria-label="Email me"
             className="p-3 rounded-full bg-background/50 hover:bg-accent transition-all duration-300 hover:shadow-elegant"
           >
             <Mail className="h-5 w-5" />

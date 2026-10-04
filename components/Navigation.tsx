@@ -89,6 +89,7 @@ const Navigation = () => {
             <Button
               variant="ghost"
               size="sm"
+              aria-label={isMobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
               className="text-muted-foreground hover:text-primary"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >

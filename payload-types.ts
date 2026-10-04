@@ -75,6 +75,7 @@ export interface Config {
     'contact-info': ContactInfo;
     uploads: Upload;
     'chat-messages': ChatMessage;
+    'contact-submissions': ContactSubmission;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -90,6 +91,7 @@ export interface Config {
     'contact-info': ContactInfoSelect<false> | ContactInfoSelect<true>;
     uploads: UploadsSelect<false> | UploadsSelect<true>;
     'chat-messages': ChatMessagesSelect<false> | ChatMessagesSelect<true>;
+    'contact-submissions': ContactSubmissionsSelect<false> | ContactSubmissionsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -311,6 +313,22 @@ export interface ChatMessage {
   message: string;
   sender: 'user' | 'bot';
   timestamp: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact-submissions".
+ */
+export interface ContactSubmission {
+  id: number;
+  name: string;
+  email: string;
+  company?: string | null;
+  message: string;
+  intent?: string | null;
+  userAgent?: string | null;
+  website?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -576,6 +594,17 @@ export interface ChatMessagesSelect<T extends boolean = true> {
   message?: T;
   sender?: T;
   timestamp?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+export interface ContactSubmissionsSelect<T extends boolean = true> {
+  name?: T;
+  email?: T;
+  company?: T;
+  message?: T;
+  intent?: T;
+  userAgent?: T;
+  website?: T;
   updatedAt?: T;
   createdAt?: T;
 }

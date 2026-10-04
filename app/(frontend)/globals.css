@@ -217,11 +217,25 @@
   0%, 100% { opacity: 1; }
   50% { opacity: 0; }
 }
+/*
+  A terminal caret: a solid block, taller than the x-height, sitting on the text
+  baseline.
+
+  `vertical-align: baseline` is load-bearing. Without it the block aligns to the
+  *bottom* of the line box, and because it is 1.5em tall against a 1.5rem
+  line-height it becomes the tallest thing in the line — pushing "routing" down
+  and visibly out of alignment with its own "$" marker. Pinning it to the
+  baseline keeps the caret below the text instead of beside it.
+
+  The cursor carries the primary token rather than a literal so it tracks the
+  theme; the transcript text next to it is emerald by explicit design, which is
+  a deliberate exception (see the comment on the transcript block).
+*/
 .blinking-cursor-block {
   display: inline-block;
+  vertical-align: baseline;
   width: 0.75em;
-  height: 1.5em;
+  height: 1.15em;
   background-color: hsl(var(--primary));
   animation: blink 1s step-end infinite;
-  transform: translateY(0.15em);
 }
