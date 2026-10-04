@@ -71,6 +71,7 @@
  * ladder's type.
  */
 
+import { parseMoodReply } from "./emotion";
 import { GROOT_MODELS, callGemini } from "./gemini";
 import { type AskArgs, type CallOutcome, type LlmResult } from "./llm-types";
 import { OPENROUTER_MODELS, callOpenRouter } from "./openrouter";
@@ -188,7 +189,9 @@ export async function askGroot(args: AskArgs): Promise<LlmResult> {
     const outcome = await attempt.run(args);
 
     if (outcome.kind === "ok") {
-      return { ok: true, text: outcome.text, model: attempt.model };
+      const { text, emotion } = parseMoodReply(outcome.text);
+      if (!text) return { ok: false, reason: "empty" };
+      return { ok: true, text, emotion, model: attempt.model };
     }
 
     // This model is gone or out of quota. The next rung has its own budget, so

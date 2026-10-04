@@ -5,6 +5,7 @@ import { classifyRoute, outageOutcomeFor, routeOutcomeFor } from "@/lib/groot/cl
 import { askGroot } from "@/lib/groot/llm";
 import { UNKNOWN_INTENT_ID, classify } from "@/lib/groot/intents";
 import type { IntentId } from "@/lib/groot/intents";
+import { EMOTION_IDS, type EmotionId } from "@/lib/groot/emotion";
 import type { PromptTurn } from "@/lib/groot/prompt";
 
 /**
@@ -112,6 +113,7 @@ const TurnSchema = z.object({
 const RequestSchema = z.object({
   text: z.string().trim().min(1).max(MAX_TEXT_CHARS),
   turns: z.array(TurnSchema).max(MAX_TURNS).default([]),
+  emotion: z.enum(EMOTION_IDS as [EmotionId, ...EmotionId[]]).optional(),
 });
 
 type ReplyMode = "deterministic" | "llm";
@@ -140,6 +142,7 @@ function succeed(args: {
   reply: string;
   intentId: IntentId | null;
   confidence: number;
+  emotion?: EmotionId;
 }): Response {
   return Response.json({ ok: true, ...args });
 }
@@ -241,7 +244,12 @@ export async function POST(request: Request): Promise<Response> {
       exists for an unreachable model, never for a reachable one.
     */
 
-    const answer = await askGroot({ question: text, turns, agentName: AGENT_NAME });
+    const answer = await askGroot({
+      question: text,
+      turns,
+      agentName: AGENT_NAME,
+      emotion: parsed.data.emotion,
+    });
 
     // `ok === false` rather than `!ok`: this repo runs with `strictNullChecks`
     // off, where truthiness does not narrow a boolean discriminant and `!ok`
@@ -262,6 +270,7 @@ export async function POST(request: Request): Promise<Response> {
       reply: answer.text,
       intentId: null,
       confidence: local.confidence,
+      emotion: answer.emotion,
     });
   } catch (error) {
     // Last resort. Nothing above should throw, but an unexpected crash must not

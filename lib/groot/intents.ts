@@ -83,7 +83,7 @@ export const INTENTS: readonly Intent[] = [
     // would be a cycle and `AGENT_NAME` would be in its TDZ while this array
     // initialises. `AGENT_NAME` in `agent.ts` is the source of truth.
     reply:
-      "Hey. Groot here. Groot can show you the projects, walk through the skills, or pass a message to Ayush. /help lists everything.",
+      "Hey. Groot here. Groot can show you the projects, walk through the skills, or pass a message to Ayush. Just ask.",
   },
   {
     id: "help",
@@ -184,7 +184,7 @@ export const INTENTS: readonly Intent[] = [
     command: "/thanks",
     keywords: ["thanks", "thank", "thx", "cheers", "shukriya", "dhanyavad", "appreciate"],
     phrases: ["thank you", "thanks a lot"],
-    reply: "No problem. Use /contact if you want to reach Ayush.",
+    reply: "No problem. Just ask if you want to reach Ayush.",
   },
   {
     id: "clear",

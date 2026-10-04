@@ -16,6 +16,7 @@ import { ContactForm } from "@/components/Chatbot/ContactForm";
 import { OrbToggle } from "@/components/Chatbot/OrbToggle";
 import { useGroot } from "@/hooks/useGroot";
 import { AGENT_NAME, SUGGESTIONS } from "@/lib/groot/agent";
+import { EMOTIONS } from "@/lib/groot/emotion";
 import { INTENT_BY_ID } from "@/lib/groot/intents";
 import { toLines } from "@/lib/groot/lines";
 
@@ -150,15 +151,8 @@ export function ChatbotWidget() {
     visitor asks something rather than while they watch, which keeps a long think
     from cycling through all of them like a loading spinner.
   */
-  const THINKING_PHRASES = [
-    "one moment",
-    "groot is considering",
-    "checking the logs",
-    "assembling that",
-    "give groot a second",
-    "reading the notes",
-    "on it",
-  ] as const;
+  const mood = EMOTIONS[groot.emotion];
+  const THINKING_PHRASES = mood.phrases;
 
   const thinkingPhrase = useRef(0);
   if (groot.status === "routing") thinkingPhrase.current += 1;
@@ -185,6 +179,7 @@ export function ChatbotWidget() {
   const speaking = groot.orbState === "speaking";
   const thinking = groot.orbState === "thinking";
   const busy = speaking || thinking;
+  const ringColor = speaking ? mood.glow : mood.thinking;
 
   // A ~4Hz syllable cadence. Any faster and the ring strobes instead of talking.
   const beat = speaking ? 0.55 : 1.05;
@@ -651,26 +646,23 @@ export function ChatbotWidget() {
             reduceMotion ? (
               <span
                 aria-hidden="true"
-                className={`pointer-events-none absolute inset-0 rounded-full border-2 ${
-                  speaking ? "border-primary/70" : "border-amber-400/70"
-                }`}
+                className="pointer-events-none absolute inset-0 rounded-full border-2"
+                style={{ borderColor: `${ringColor}b3` }}
               />
             ) : (
               <>
                 <motion.span
                   aria-hidden="true"
-                  className={`pointer-events-none absolute inset-0 rounded-full blur-lg ${
-                    speaking ? "bg-primary/25" : "bg-amber-400/25"
-                  }`}
+                  className="pointer-events-none absolute inset-0 rounded-full blur-lg"
+                  style={{ backgroundColor: `${ringColor}40` }}
                   initial={{ opacity: 0.3 }}
                   animate={{ opacity: [0.3, 0.85, 0.3] }}
                   transition={{ duration: beat, ease: "easeInOut", repeat: Infinity }}
                 />
                 <motion.span
                   aria-hidden="true"
-                  className={`pointer-events-none absolute inset-1 rounded-full border-2 ${
-                    speaking ? "border-primary/70" : "border-amber-400/70"
-                  }`}
+                  className="pointer-events-none absolute inset-1 rounded-full border-2"
+                  style={{ borderColor: `${ringColor}b3` }}
                   initial={{ opacity: 0.65, scale: 1 }}
                   animate={{ opacity: [0.65, 0, 0.65], scale: [1, 1.3, 1] }}
                   transition={{ duration: beat, ease: "easeOut", repeat: Infinity }}
@@ -692,7 +684,7 @@ export function ChatbotWidget() {
               when WebGPU is missing or the shader fails to compile — the toggle
               itself must never depend on the orb being available.
             */}
-            <OrbToggle state={groot.orbState} open={open} />
+            <OrbToggle state={groot.orbState} emotion={groot.emotion} open={open} />
           </button>
         </div>
       </div>

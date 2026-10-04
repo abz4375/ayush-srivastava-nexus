@@ -145,6 +145,7 @@ export async function callOpenRouter(
           question: args.question,
           turns: args.turns,
           agentName: args.agentName,
+          emotion: args.emotion,
         }),
       },
     ],

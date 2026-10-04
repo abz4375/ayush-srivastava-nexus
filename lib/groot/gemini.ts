@@ -111,6 +111,7 @@ export async function callGemini(
               question: args.question,
               turns: args.turns,
               agentName: args.agentName,
+              emotion: args.emotion,
             }),
           },
         ],

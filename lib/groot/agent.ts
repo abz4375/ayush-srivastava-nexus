@@ -30,6 +30,8 @@
 
 import type { Classification, Intent, IntentId } from "./intents";
 import { classify, INTENT_BY_ID } from "./intents";
+import { type EmotionId, DEFAULT_EMOTION, clipForEmotion } from "./emotion";
+import { toLines } from "./lines";
 
 /** Single source of truth for the agent's display name. Copy, tooltips and
  *  aria-labels all read from this so a rename is one edit. */
@@ -79,6 +81,8 @@ export interface AgentStateShape {
    * appended, because it belongs to a question that is no longer the last one.
    */
   awaitingRequest: number | null;
+  /** Current mood, reported by the model with each answer. Drives colours, status text and reply length. */
+  emotion: EmotionId;
 }
 
 export type AgentEvent =
@@ -124,6 +128,8 @@ export type AgentEvent =
        * transcript's badge would then display.
        */
       intentId?: IntentId;
+      /** Mood the model reported with this answer. Absent keeps the current one. */
+      emotion?: EmotionId;
     }
   | { type: "replyShown" }
   | { type: "openForm" }
@@ -264,7 +270,13 @@ export const initialAgentState: AgentStateShape = {
   lastClassification: null,
   pendingIntent: null,
   awaitingRequest: null,
+  emotion: DEFAULT_EMOTION,
 };
+
+function shapeReply(text: string, emotion: EmotionId): string {
+  if (emotion !== "wary" && emotion !== "cold") return text;
+  return clipForEmotion(toLines(text), emotion).join("\n");
+}
 
 /** Derive the orb's visual state from the agent's logical state. */
 export function orbStateFor(status: AgentState): OrbState {
@@ -342,6 +354,7 @@ export function reduce(state: AgentStateShape, event: AgentEvent): AgentStateSha
           // A request in flight belongs to a transcript that no longer exists.
           // Leaving the id set would let its answer land in the cleared session.
           awaitingRequest: null,
+          emotion: DEFAULT_EMOTION,
         };
       }
 
@@ -382,7 +395,7 @@ export function reduce(state: AgentStateShape, event: AgentEvent): AgentStateSha
       const reply: ChatMessage = {
         id: nextId("b"),
         from: "groot",
-        text: intent.reply,
+        text: shapeReply(intent.reply, state.emotion),
         intentId: intent.id,
         confidence: state.lastClassification?.confidence ?? 1,
       };
@@ -433,7 +446,7 @@ export function reduce(state: AgentStateShape, event: AgentEvent): AgentStateSha
         messages: push(state.messages, {
           id: nextId("b"),
           from: "groot",
-          text,
+          text: tableIntent ? shapeReply(text, state.emotion) : text,
           // Absent for a model answer, and correctly so: nothing in the table
           // produced that, so the renderer shows no badge rather than a wrong one.
           intentId: tableIntent?.id,
@@ -444,6 +457,7 @@ export function reduce(state: AgentStateShape, event: AgentEvent): AgentStateSha
         paletteOpen: showPalette ? true : state.paletteOpen,
         pendingIntent: null,
         awaitingRequest: null,
+        emotion: event.emotion ?? state.emotion,
       };
     }
 

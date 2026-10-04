@@ -5,6 +5,7 @@ import { Component, type ErrorInfo, type ReactNode, useEffect, useState } from "
 import { Terminal } from "lucide-react";
 
 import type { OrbState } from "@/lib/groot/agent";
+import { type EmotionId, orbColorsFor } from "@/lib/groot/emotion";
 
 /**
  * Failure-isolated mount for the ORB-23 shader.
@@ -91,6 +92,7 @@ export interface OrbToggleProps {
   state: OrbState;
   /** True while the terminal panel is open. */
   open: boolean;
+  emotion?: EmotionId;
 }
 
 /**
@@ -103,7 +105,7 @@ export interface OrbToggleProps {
  */
 const ORB_SIZE = 56;
 
-export function OrbToggle({ state }: OrbToggleProps) {
+export function OrbToggle({ state, emotion = "calm" }: OrbToggleProps) {
   const webgpu = useWebGpu();
   const [shaderFailed, setShaderFailed] = useState(false);
 
@@ -116,6 +118,7 @@ export function OrbToggle({ state }: OrbToggleProps) {
       <Orb23
         size={ORB_SIZE}
         state={state}
+        stateColors={orbColorsFor(emotion)}
         /*
          * Deliberately never paused.
          *

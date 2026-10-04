@@ -15,6 +15,7 @@ import {
   shouldGoRemote,
   speakingDurationMs,
 } from "@/lib/groot/agent";
+import type { EmotionId } from "@/lib/groot/emotion";
 import { type Classification, COMMANDS, classify, type IntentId } from "@/lib/groot/intents";
 import type { PromptTurn } from "@/lib/groot/prompt";
 
@@ -68,7 +69,9 @@ function readTranscript(): Persisted | null {
  * what stops that becoming a reply that tells the visitor to leave a note and
  * then opens no form.
  */
-function isGrootReply(data: unknown): data is { reply: string; intentId?: IntentId } {
+function isGrootReply(
+  data: unknown,
+): data is { reply: string; intentId?: IntentId; emotion?: EmotionId } {
   if (typeof data !== "object" || data === null) return false;
   const row = data as Record<string, unknown>;
   return row.ok === true && typeof row.reply === "string" && row.reply.trim() !== "";
@@ -94,6 +97,9 @@ export function useGroot() {
   */
   const messagesRef = useRef(state.messages);
   messagesRef.current = state.messages;
+
+  const emotionRef = useRef(state.emotion);
+  emotionRef.current = state.emotion;
 
   /** Live request, so a new message or a clear can abandon the old answer. */
   const inFlight = useRef<AbortController | null>(null);
@@ -232,6 +238,7 @@ export function useGroot() {
       turns: readonly PromptTurn[],
       requestId: number,
       fallback: Classification,
+      emotion: EmotionId,
     ): Promise<void> => {
       const startedAt = performance.now();
       const controller = new AbortController();
@@ -239,17 +246,19 @@ export function useGroot() {
 
       let reply: string | null = null;
       let replyIntentId: IntentId | null = null;
+      let replyEmotion: EmotionId | undefined;
       try {
         const response = await fetch("/api/groot", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ text: question, turns }),
+          body: JSON.stringify({ text: question, turns, emotion }),
           signal: controller.signal,
         });
         const data: unknown = await response.json();
         if (isGrootReply(data)) {
           reply = data.reply.trim();
           replyIntentId = data.intentId ?? null;
+          replyEmotion = data.emotion;
         }
       } catch {
         // Offline, aborted, rate-limited, or the provider is down. The table's
@@ -275,6 +284,7 @@ export function useGroot() {
               // Forwarded so a table-produced answer can still open the form or
               // scroll the page. Absent for real model answers, by design.
               intentId: replyIntentId ?? undefined,
+              emotion: replyEmotion,
             }),
           wait,
         );
@@ -331,7 +341,7 @@ export function useGroot() {
         return;
       }
 
-      void askServer(trimmed, turns, requestId, classification);
+      void askServer(trimmed, turns, requestId, classification, emotionRef.current);
     },
     [askServer, cancelInFlight, cancelPending, later],
   );
@@ -357,6 +367,7 @@ export function useGroot() {
     formOpen: state.formOpen,
     paletteOpen: state.paletteOpen,
     lastClassification: state.lastClassification,
+    emotion: state.emotion,
 
     // Presentation
     orbState,

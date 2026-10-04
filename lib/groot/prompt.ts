@@ -18,6 +18,8 @@
  * invention about someone's employer.
  */
 
+import { type EmotionId, DEFAULT_EMOTION, moodBrief } from "./emotion";
+
 /**
  * The authoritative facts. If the model says anything about Ayush that is not
  * here, it invented it.
@@ -94,8 +96,8 @@ WHAT YOU KNOW
 The context below is the only thing you know. It is complete for its purpose. Do not add to it from general knowledge, and do not guess.
 
 - Never state a fact about Ayush, his employer, his projects, his stack, his salary, his location or his availability that is not already in the context.
-- If the context does not contain the answer, say so plainly in one sentence and point at /contact. That is a correct answer, not a failure. Do not apologise for it.
-- If the question is not about Ayush or his work, say in one sentence that this assistant only knows his work, and offer /contact.
+- If the context does not contain the answer, say so plainly in one sentence and offer to pass a message to Ayush. Never tell the visitor to type a slash command. That is a correct answer, not a failure. Do not apologise for it.
+- If the question is not about Ayush or his work, say in one sentence that this assistant only knows his work, and offer to pass a message to Ayush.
 
 EXAMPLES OF THE REGISTER
 
@@ -168,8 +170,12 @@ export function buildAnswerPrompt(args: {
   question: string;
   turns: readonly PromptTurn[];
   agentName: string;
+  emotion?: EmotionId;
 }): string {
   return [
+    "MOOD",
+    ...moodBrief(args.emotion ?? DEFAULT_EMOTION),
+    "",
     "CONTEXT — the authoritative facts about Ayush. This is all you know.",
     SITE_FACTS,
     "",

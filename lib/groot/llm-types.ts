@@ -19,6 +19,7 @@
  * site.
  */
 
+import type { EmotionId } from "./emotion";
 import type { PromptTurn } from "./prompt";
 
 /**
@@ -61,6 +62,7 @@ export interface AskArgs {
    */
   turns: readonly PromptTurn[];
   agentName: string;
+  emotion?: EmotionId;
 }
 
 export type LlmFailure =
@@ -94,6 +96,8 @@ export interface LlmAnswer {
    * a human reading a log line.
    */
   model: string;
+  /** Mood the model reported for this turn, if it reported a valid one. */
+  emotion?: EmotionId;
 }
 
 export interface LlmFailureResult {
