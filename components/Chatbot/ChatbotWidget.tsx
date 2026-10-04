@@ -3,8 +3,8 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import {
+  ArrowUp,
   ChevronRight,
-  CornerDownLeft,
   Eraser,
   Terminal,
   X,
@@ -85,6 +85,46 @@ export function ChatbotWidget() {
     }
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
+  }, [open]);
+
+  /*
+    Lock the page behind the panel on every screen.
+
+    The glass says "this is a layer over a still page". If the article slides
+    underneath it while the panel stays put, the glass is exposed as a filter over
+    moving content and the whole effect inverts — it stops reading as frosted
+    glass and starts reading as a smudged window. The panel keeps its own scroll;
+    only the page behind it is held.
+
+    `padding-right` compensation is not optional. Hiding a classic scrollbar
+    removes its width from the viewport, every full-width element reflows 15px
+    wider, and the dialog visibly jumps sideways as it opens. The measurement is
+    `0` where scrollbars are overlays, so this costs nothing on mobile.
+
+    The prior inline values are saved and restored rather than blanked, because
+    something else on this page may own `overflow` or `padding-right`, and
+    clobbering them would only ever show up after both features had been used.
+
+    `overscroll-behavior` stops the gesture from bouncing at the ends, which on
+    iOS otherwise scrolls the body anyway despite the overflow lock.
+  */
+  useEffect(() => {
+    if (!open) return;
+
+    const { body } = document;
+    const previousOverflow = body.style.overflow;
+    const previousPadding = body.style.paddingRight;
+    const scrollbar = window.innerWidth - document.documentElement.clientWidth;
+
+    body.style.overflow = "hidden";
+    body.style.overscrollBehavior = "none";
+    if (scrollbar > 0) body.style.paddingRight = `${scrollbar}px`;
+
+    return () => {
+      body.style.overflow = previousOverflow;
+      body.style.paddingRight = previousPadding;
+      body.style.overscrollBehavior = "";
+    };
   }, [open]);
 
   const submit = useCallback(
@@ -180,9 +220,51 @@ export function ChatbotWidget() {
 
   return (
     <>
+      {/*
+        Tap-to-dismiss glass, a sibling of the dock and deliberately not a child.
+
+        A `translate`, `transform`, `filter` or `backdrop-filter` on an ancestor
+        turns that ancestor into the containing block for its `position: fixed`
+        descendants. Centring the dock requires `translate` (Framer Motion owns
+        `transform` on the panel), so a fixed backdrop *inside* the dock resolves
+        against the dock's own 24rem box instead of the viewport — it covers only
+        the dialog, leaving the page sharp and with no dismiss target. As a
+        sibling with no such ancestor, `inset: 0` means the viewport again.
+
+        Hence an explicit two-layer stack instead of the nested z-10/z-20/z-30
+        that worked only while the backdrop sat inside the same context: glass at
+        z-60, dock at z-70. Nothing else on the page is above z-50 — the nav is
+        the tallest, at exactly 50.
+
+        `aria-hidden` because it is not a control — it is the glass the panel
+        sits on. Dismissal for a keyboard or a screen reader is Escape and the
+        close button in the header, both of which are real, focusable and
+        announced. Making this a second close button would add an unlabelled
+        duplicate of one that already exists.
+      */}
+      <AnimatePresence>
+        {open ? (
+          <motion.div
+            key="groot-glass"
+            aria-hidden="true"
+            onClick={() => setOpen(false)}
+            className="groot-backdrop"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.18, ease: "easeOut" }}
+          />
+        ) : null}
+      </AnimatePresence>
+
       {/* Toggle. The orb is the affordance, so it stays interactive-looking even
           when the panel is closed. */}
-      <div className="fixed right-4 bottom-4 z-50 flex flex-col items-end gap-2">
+      <div
+        className={`z-[70] flex flex-col items-end gap-2 ${
+          open ? "groot-dock-open" : "fixed right-4 bottom-4"
+        }`}
+      >
+
         <AnimatePresence>
           {open ? (
             <motion.section
@@ -193,7 +275,7 @@ export function ChatbotWidget() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 16, scale: 0.98 }}
               transition={{ duration: 0.18, ease: "easeOut" }}
-              className="flex max-h-[min(32rem,80vh)] w-[calc(100vw-2rem)] flex-col overflow-hidden rounded-lg border border-border bg-card/95 font-mono text-sm shadow-2xl backdrop-blur-md sm:w-96"
+              className="groot-sheet z-20 flex max-h-[min(32rem,80vh)] w-[calc(100vw-2rem)] flex-col overflow-hidden rounded-lg border border-border bg-card/95 font-mono text-sm shadow-2xl backdrop-blur-md sm:w-96"
             >
               <header className="flex items-center justify-between gap-2 border-b border-border bg-muted/60 px-3 py-2">
                 <div className="flex min-w-0 items-center gap-2">
@@ -384,17 +466,13 @@ export function ChatbotWidget() {
                           submit(filteredCommands[paletteIndex] ?? draft);
                         }
                       }}
-                      placeholder="Type a command, or /help..."
+                      placeholder="Ask about Ayush's work..."
                       aria-label={`Message ${AGENT_NAME}`}
                       aria-expanded={showPalette}
                       aria-controls={showPalette ? "groot-palette" : undefined}
                       autoComplete="off"
                       spellCheck={false}
-                      className="border-border bg-transparent pr-8 font-mono"
-                    />
-                    <CornerDownLeft
-                      className="pointer-events-none absolute top-1/2 right-2 size-3.5 -translate-y-1/2 text-muted-foreground"
-                      aria-hidden="true"
+                      className="border-border bg-transparent font-mono"
                     />
 
                     <AnimatePresence>
@@ -443,6 +521,40 @@ export function ChatbotWidget() {
                       ) : null}
                     </AnimatePresence>
                   </div>
+
+                  {/*
+                    The send button.
+
+                    It existed in the previous widget as a `<BiSolidSend>` submit
+                    button and was replaced by a decorative `CornerDownLeft`
+                    glyph on the assumption that Enter was enough. That assumption
+                    holds on a desktop keyboard and nowhere else: on a phone the
+                    soft keyboard's return key is not reliably a submit key, so
+                    the only way to send became "hope the keyboard cooperates".
+
+                    So it is a real `<button type="submit">` — which means it also
+                    works with a keyboard, with a screen reader, and with the
+                    form's own `onSubmit`, rather than duplicating the submit call
+                    in an `onClick` that could drift from it.
+
+                    `size-11` on touch and `size-8` above `sm`: 44px is the
+                    smallest target that is comfortable to hit with a thumb, and
+                    it is wasted space next to a physical keyboard. The icon is
+                    `ArrowUp` rather than an Enter glyph on purpose — an Enter
+                    symbol on a button that a phone user has to tap would be
+                    telling them the wrong thing about how to use it.
+
+                    Disabled on an empty draft, so it cannot fire a no-op.
+                  */}
+                  <Button
+                    type="submit"
+                    size="icon"
+                    disabled={!draft.trim()}
+                    aria-label={`Send to ${AGENT_NAME}`}
+                    className="groot-send shrink-0"
+                  >
+                    <ArrowUp className="size-4" aria-hidden="true" />
+                  </Button>
                 </form>
               )}
             </motion.section>
@@ -459,7 +571,7 @@ export function ChatbotWidget() {
           tooltip.
         */}
         <div
-          className="relative flex size-16 items-center justify-center"
+          className="groot-orb relative z-30 flex size-16 items-center justify-center"
           onMouseEnter={() => setHovered(true)}
           onMouseLeave={() => setHovered(false)}
           onFocus={() => setHovered(true)}

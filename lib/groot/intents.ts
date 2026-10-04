@@ -205,7 +205,7 @@ export const INTENTS: readonly Intent[] = [
     category: "unknown",
     keywords: [],
     reply:
-      "Groot does not have an answer for that one. Try /projects, /skills or /experience, or use /contact to reach Ayush directly.",
+      "Groot does not have an answer for that one. Try asking about his projects, skills or experience, or ask to contact Ayush directly.",
   },
 ] as const;
 

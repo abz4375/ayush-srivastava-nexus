@@ -239,3 +239,140 @@
   background-color: hsl(var(--primary));
   animation: blink 1s step-end infinite;
 }
+
+/* =================================================================
+  GROOT AS A GLASS DIALOG
+=================================================================
+
+  When the panel opens, the page behind it goes to frosted glass and a tap
+  anywhere outside dismisses it. On every screen, no media query.
+
+  ## Why the dock re-centres instead of the panel
+
+  The orb is what shows what the agent is doing, so it cannot be left behind in a
+  corner under glass while the dialog it belongs to floats in the middle — that
+  reads as two unrelated widgets. Moving the orb means centring both, and the
+  only element that knows about both is their shared parent.
+
+  So `.groot-dock-open` turns the dock from "a fixed box in the bottom-right
+  corner" into "a shrink-wrapped column, centred on the viewport".
+
+  ## The orb stays the last flex child, right-aligned
+
+  It used to be `position: absolute` against the panel's corner, on the theory
+  that overlapping would read as one object. Measured in a browser it read as a
+  bug: the orb covered the transcript's bottom-right corner and the send row.
+  In flow, `gap-2` below the panel, right-aligned by the dock's own `items-end`,
+  is the arrangement this widget shipped with and it stays legible — the orb hangs
+  off the panel's bottom-right edge without sitting on top of anything.
+
+  ## Why `translate` and not `transform`
+
+  Framer Motion writes `transform` on the panel for the open/close animation.
+  Setting `transform` here would be overwritten by the animation on every frame
+  and the whole dialog would jump toward the top-left mid-fade. `translate` is an
+  independent property that composes with `transform` in a defined order, so both
+  can be live at once.
+
+  The cost of that is documented at the backdrop: `translate` also makes this
+  element the containing block for fixed descendants.
+
+  ## `pointer-events`
+
+  The dock is `none` and its children opt back in. It shrink-wraps to the panel,
+  so it is not swallowing the viewport, but this keeps the 8px gap between panel
+  and orb tapping through to the glass — which is the smallest version of "tap
+  outside to close" and the one a thumb hits by accident.
+
+  ## Why this is unlayered CSS and not Tailwind variants
+
+  It has to beat the utility classes already on these elements
+  (`fixed right-4 bottom-4`, `items-end`, `max-h-[min(32rem,80vh)]`,
+  `w-[calc(100vw-2rem)]`, `sm:w-96`). Tailwind v4 emits those inside
+  `@layer utilities`, and unlayered rules outrank every layer — so this wins
+  without `!important` and without stripping classes off the elements.
+*/
+
+.groot-backdrop {
+  position: fixed;
+  inset: 0;
+  /* Sibling of the dock, not a child: see the note above on `translate` and
+     fixed descendants. z-60 sits above every page element (the nav is the
+     tallest at exactly 50) and below the dock's z-70. */
+  z-index: 60;
+  /*
+    `saturate` alongside `blur` because a pure blur desaturates whatever is
+    behind it — the page goes grey rather than soft, which reads as "disabled"
+    rather than "behind glass". Putting the colour back up is what makes it look
+    like glass instead of like a scrim.
+  */
+  background-color: hsl(var(--background) / 0.5);
+  backdrop-filter: blur(18px) saturate(150%);
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
+}
+
+.groot-dock-open {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
+  /*
+    `align-items` is deliberately NOT set here. The dock already carries
+    Tailwind's `items-end`, which is what right-aligns the orb under the panel's
+    right edge. Setting `stretch` would override it and let the 64px orb stretch
+    to the panel's full width, throwing away its own hit target.
+  */
+  pointer-events: none;
+}
+
+.groot-dock-open > * {
+  pointer-events: auto;
+}
+
+/*
+  Height only, not position. Reserves the orb plus the gap beneath it, so a
+  56px orb cannot be pushed off the bottom of a short viewport by the panel's own
+  80vh cap. Without this the dock is 80vh + 72px tall and clips.
+*/
+.groot-sheet {
+  max-height: calc(82vh - 5rem);
+}
+
+/*
+  A short viewport — a phone held sideways, a laptop with the panel near the
+  bottom — cannot afford the reserve above. At 390px tall, `82vh - 5rem` left a
+  240px panel wrapping a 137px transcript scroller, which is three lines of
+  reading behind a dialog the size of the screen. Spending more of the height and
+  reclaiming part of the orb reserve is the right trade when vertical space is
+  what is scarce.
+*/
+@media (max-height: 560px) {
+  .groot-sheet {
+    max-height: calc(94vh - 4.5rem);
+  }
+}
+
+/*
+  Send-button target size, decided by pointer type and not by width.
+
+  This was `size-11 sm:size-8` — a width breakpoint. That is the wrong axis:
+  an 844px-wide viewport is a desktop browser *or* a phone held sideways, and
+  measured in a real 844x390 viewport the button came out at 32px, under the 44px
+  floor, because `sm` had already applied. Same for a 768px tablet in portrait.
+
+  `pointer: fine` is the honest test. A mouse or trackpad is precise and does
+  not need 44px; a finger does, regardless of how wide the screen is. Both
+  conditions are required for the small size — a narrow window on a desktop
+  should not get a 44px button, and a precise stylus on a large tablet should.
+*/
+.groot-send {
+  width: 2.75rem;
+  height: 2.75rem;
+}
+
+@media (pointer: fine) and (min-width: 640px) {
+  .groot-send {
+    width: 2rem;
+    height: 2rem;
+  }
+}

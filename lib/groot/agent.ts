@@ -209,7 +209,7 @@ export function shouldGoRemote(classification: Classification): boolean {
 export const WELCOME: ChatMessage = {
   id: "welcome",
   from: "groot",
-  text: `${AGENT_NAME} here. Ask about Ayush's work and the projects he has built, or leave him a message. Try /projects, /skills, /experience or /contact.`,
+  text: `${AGENT_NAME} here. Ask about Ayush's work and the projects he has built, or leave him a message.`,
   intentId: "greeting",
   confidence: 1,
 };
